@@ -15,15 +15,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +35,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,8 +48,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,9 +67,11 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -72,6 +79,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,7 +94,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import eu.florianbecker.baureihensammler.data.AlphaTrainSeriesRepository
 import eu.florianbecker.baureihensammler.data.TrainSeries
+import eu.florianbecker.baureihensammler.data.fetchWikipediaSummary
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
+import eu.florianbecker.baureihensammler.R
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -120,11 +130,12 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
     val alreadyCollected = validSeries?.let { series ->
         collection.any { it.baureihe == series.baureihe }
     } ?: false
-    val hasCollectionPhoto = validSeries?.let { series ->
+    val collectionSnapshotPath = validSeries?.let { series ->
         collection.firstOrNull { it.baureihe == series.baureihe }
             ?.imagePath
-            ?.isNotBlank() == true
-    } ?: false
+            ?.takeIf { it.isNotBlank() }
+    }
+    val hasCollectionPhoto = collectionSnapshotPath != null
 
     LaunchedEffect(Unit) {
         collection.clear()
@@ -170,8 +181,18 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            val searchScroll = rememberScrollState()
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .then(
+                        if (currentView == "search") {
+                            Modifier.verticalScroll(searchScroll)
+                        } else {
+                            Modifier
+                        }
+                    ),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 TopHeader(
@@ -186,6 +207,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         validSeries = validSeries,
                         alreadyCollected = alreadyCollected,
                         hasCollectionPhoto = hasCollectionPhoto,
+                        collectionSnapshotPath = collectionSnapshotPath,
                         imeVisible = imeVisible,
                         onTakeSnapshot = {
                             val target = validSeries?.baureihe ?: return@SearchView
@@ -300,6 +322,9 @@ private fun rememberImeVisible(): Boolean {
     return imeVisible
 }
 
+/** DB Corporate Red */
+private val DbBrandRed = Color(0xFFEC0016)
+
 @Composable
 private fun SearchInputPlate(
     query: String,
@@ -307,8 +332,9 @@ private fun SearchInputPlate(
 ) {
     val colors = MaterialTheme.colorScheme
     val ghostSuffix = ghostBaureiheSuffix(query)
-    val contentPadding = OutlinedTextFieldDefaults.contentPadding()
-    val fieldColors = OutlinedTextFieldDefaults.colors(
+    val contentPadding = TextFieldDefaults.contentPaddingWithoutLabel()
+    val plateUnderline = DbBrandRed
+    val fieldColors = TextFieldDefaults.colors(
         focusedTextColor = Color.Transparent,
         unfocusedTextColor = Color.Transparent,
         disabledTextColor = Color.Transparent,
@@ -318,24 +344,61 @@ private fun SearchInputPlate(
         focusedPlaceholderColor = colors.onSurfaceVariant.copy(alpha = 0.55f),
         unfocusedPlaceholderColor = colors.onSurfaceVariant.copy(alpha = 0.55f),
         cursorColor = colors.primary,
-        focusedBorderColor = colors.primary,
-        unfocusedBorderColor = colors.outline,
+        focusedIndicatorColor = plateUnderline,
+        unfocusedIndicatorColor = colors.onSurfaceVariant.copy(alpha = 0.45f),
     )
 
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         color = colors.surfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
-            .border(2.dp, colors.outline, RoundedCornerShape(16.dp))
+            .border(2.dp, colors.outline, RoundedCornerShape(12.dp))
     ) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("Baureihe", color = colors.onSurfaceVariant, fontWeight = FontWeight.SemiBold)
-            Box(Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(50.dp)
+                    .fillMaxHeight()
+                    .background(DbBrandRed)
+                    .padding(vertical = 6.dp, horizontal = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "DB",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.labelLarge,
+                    lineHeight = MaterialTheme.typography.labelLarge.fontSize
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    "BR",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.labelLarge,
+                    lineHeight = MaterialTheme.typography.labelLarge.fontSize,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(colors.surfaceVariant)
+                    .padding(start = 4.dp, end = 10.dp)
+            ) {
                 if (query.isNotEmpty()) {
                     Text(
                         text = buildAnnotatedString {
-                            withStyle(SpanStyle(color = colors.onSurface)) {
+                            withStyle(SpanStyle(color = colors.onSurface, fontWeight = FontWeight.SemiBold)) {
                                 append(query)
                             }
                             if (ghostSuffix.isNotEmpty()) {
@@ -353,12 +416,18 @@ private fun SearchInputPlate(
                             .wrapContentWidth()
                     )
                 }
-                OutlinedTextField(
+                TextField(
                     value = query,
                     onValueChange = onQueryChange,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    placeholder = { Text("z. B. 401") },
+                    placeholder = {
+                        Text(
+                            "z. B. 401",
+                            fontWeight = FontWeight.SemiBold,
+                            color = colors.onSurfaceVariant.copy(alpha = 0.55f)
+                        )
+                    },
                     colors = fieldColors,
                 )
             }
@@ -371,11 +440,13 @@ private fun SearchView(
     validSeries: TrainSeries?,
     alreadyCollected: Boolean,
     hasCollectionPhoto: Boolean,
+    collectionSnapshotPath: String?,
     imeVisible: Boolean,
     onTakeSnapshot: () -> Unit,
     onSaveCollected: () -> Unit,
     onOpenWiki: (String) -> Unit
 ) {
+    val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -383,6 +454,16 @@ private fun SearchView(
     val detailsVisible = !imeVisible && showMoreInfos
 
     validSeries?.let { series ->
+        var wikiSummary by remember(series.baureihe) { mutableStateOf<String?>(null) }
+        var wikiSummaryLoading by remember(series.baureihe) { mutableStateOf(false) }
+        LaunchedEffect(series.baureihe, detailsVisible) {
+            if (!detailsVisible) return@LaunchedEffect
+            if (wikiSummary != null) return@LaunchedEffect
+            wikiSummaryLoading = true
+            wikiSummary = fetchWikipediaSummary(series.wikiSummaryApiUrl)
+            wikiSummaryLoading = false
+        }
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -449,6 +530,91 @@ private fun SearchView(
                     Text("${series.category} - Vmax ${series.vmaxKmh} km/h")
                     Text("Haufigkeit (Schatzung): ${series.fleetEstimate} Fahrzeuge")
                     Text("Punkte beim Markieren: ${calculatePoints(series.fleetEstimate)}")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            "Mein Schnappschuss",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colors.onSurfaceVariant
+                        )
+                        val snapshotBmp = remember(collectionSnapshotPath) {
+                            collectionSnapshotPath?.takeIf { File(it).exists() }?.let { path ->
+                                BitmapFactory.decodeFile(path)
+                            }
+                        }
+                        if (snapshotBmp != null) {
+                            Image(
+                                bitmap = snapshotBmp.asImageBitmap(),
+                                contentDescription = "Mein Schnappschuss BR ${series.baureihe}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(colors.surfaceVariant),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    "Noch kein Foto",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = colors.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                    if (wikiSummaryLoading && wikiSummary == null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(22.dp),
+                                strokeWidth = 2.dp
+                            )
+                            Text(
+                                "Wikipedia …",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = colors.onSurfaceVariant
+                            )
+                        }
+                    }
+                    wikiSummary?.let { summary ->
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                        Text(
+                            text = summary,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = colors.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Image(
+                            painter = painterResource(R.drawable.cc_by_sa_4_80x15),
+                            contentDescription = "CC BY-SA 4.0 — Creative Commons Namensnennung, Weitergabe unter gleichen Bedingungen",
+                            modifier = Modifier
+                                .height(10.dp)
+                                .wrapContentWidth()
+                                .clickable {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("https://creativecommons.org/licenses/by-sa/4.0/deed.de")
+                                        )
+                                    )
+                                },
+                            contentScale = ContentScale.FillHeight
+                        )
+                    }
                     OutlinedButton(onClick = { onOpenWiki(series.wikiArticleUrl) }) {
                         Text("Wikipedia")
                     }
