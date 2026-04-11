@@ -528,7 +528,7 @@ private fun SearchView(
                 }
                 if (detailsVisible) {
                     Text("${series.category} - Vmax ${series.vmaxKmh} km/h")
-                    Text("Haufigkeit (Schatzung): ${series.fleetEstimate} Fahrzeuge")
+                    Text("Haufigkeit (Schätzung): ${series.fleetEstimate} Fahrzeuge")
                     Text("Punkte beim Markieren: ${calculatePoints(series.fleetEstimate)}")
                     Column(
                         modifier = Modifier
