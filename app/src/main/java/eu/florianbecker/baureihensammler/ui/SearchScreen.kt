@@ -198,7 +198,7 @@ fun SearchView(
     imeVisible: Boolean,
     blockExternalWikiSummaries: Boolean,
     onTakeSnapshot: () -> Unit,
-    onSaveCollected: () -> Unit,
+    onToggleCollected: () -> Unit,
     onOpenWiki: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -243,15 +243,16 @@ fun SearchView(
                         modifier = Modifier.weight(1f)
                     )
                     TextButton(
-                        onClick = onSaveCollected,
-                        enabled = !alreadyCollected,
+                        onClick = onToggleCollected,
                         modifier = Modifier.widthIn(min = 152.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Outlined.Star, contentDescription = null)
                             Spacer(modifier = Modifier.size(4.dp))
                             Text(
-                                text = if (alreadyCollected) "Gespeichert" else "Speichern",
+                                text =
+                                    if (alreadyCollected) "Zurücknehmen"
+                                    else "Speichern",
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )

@@ -185,24 +185,19 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                 val intent = CameraCaptureActivity.createIntent(context, target)
                                 takeSnapshotLauncher.launch(intent)
                             },
-                            onSaveCollected = {
+                            onToggleCollected = {
                                 validSeries?.let { series ->
-                                    val now = LocalDateTime.now().format(collectionDateFormatter)
                                     val existingIndex =
                                         collection.indexOfFirst {
                                             it.baureihe == series.baureihe
                                         }
-                                    val pointsGain = calculatePoints(series.fleetEstimate)
                                     if (existingIndex >= 0) {
-                                        val existing = collection[existingIndex]
-                                        collection[existingIndex] =
-                                            existing.copy(
-                                                seenAt = now,
-                                                totalPoints =
-                                                    existing.totalPoints +
-                                                        pointsGain
-                                            )
+                                        deleteSnapshotFile(collection[existingIndex].imagePath)
+                                        collection.removeAt(existingIndex)
                                     } else {
+                                        val now =
+                                            LocalDateTime.now().format(collectionDateFormatter)
+                                        val pointsGain = calculatePoints(series.fleetEstimate)
                                         collection.add(
                                             CollectionEntry(
                                                 baureihe = series.baureihe,
