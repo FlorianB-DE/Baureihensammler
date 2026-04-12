@@ -42,6 +42,8 @@ import eu.florianbecker.baureihensammler.collection.savePrivacyOfflineMode
 import eu.florianbecker.baureihensammler.search.calculatePoints
 import eu.florianbecker.baureihensammler.search.catalogForOrigin
 import eu.florianbecker.baureihensammler.search.findSeries
+import eu.florianbecker.baureihensammler.search.matchesStoredBaureihe
+import eu.florianbecker.baureihensammler.search.needsOverlapVehicleField
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
 import eu.florianbecker.baureihensammler.util.clearAllSnapshots
 import eu.florianbecker.baureihensammler.util.deleteSnapshotFile
@@ -56,20 +58,35 @@ private val MinHeightToShowStatsWithIme = 280.dp
 fun TrainSeriesScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var query by rememberSaveable { mutableStateOf("") }
+    var vehicleQuery by rememberSaveable { mutableStateOf("") }
     var currentView by rememberSaveable { mutableStateOf("search") }
     var selectedOriginName by rememberSaveable { mutableStateOf(TrainSeriesOrigin.DB.name) }
     val selectedOrigin = TrainSeriesOrigin.fromName(selectedOriginName)
     val collection = remember { mutableStateListOf<CollectionEntry>() }
-    val validSeries = findSeries(query, selectedOrigin)
+    LaunchedEffect(query, selectedOrigin) {
+        if (!needsOverlapVehicleField(query, selectedOrigin)) {
+            vehicleQuery = ""
+        }
+    }
+
+    val validSeries =
+        findSeries(
+            brQuery = query,
+            vehicleQuery = vehicleQuery.ifBlank { null },
+            origin = selectedOrigin
+        )
+    val overlapVehicleHint =
+        needsOverlapVehicleField(query, selectedOrigin) && query.isNotBlank() &&
+            vehicleQuery.isBlank()
     val alreadyCollected =
         validSeries?.let { series ->
-            collection.any { it.baureihe == series.baureihe && it.origin == series.origin }
+            collection.any { series.matchesStoredBaureihe(it.baureihe) && it.origin == series.origin }
         }
             ?: false
     val collectionSnapshotPath =
         validSeries?.let { series ->
             collection
-                .firstOrNull { it.baureihe == series.baureihe && it.origin == series.origin }
+                .firstOrNull { series.matchesStoredBaureihe(it.baureihe) && it.origin == series.origin }
                 ?.imagePath
                 ?.takeIf { it.isNotBlank() }
         }
@@ -96,9 +113,15 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                 data.getStringExtra(CameraCaptureActivity.EXTRA_IMAGE_PATH)
                     ?: return@rememberLauncherForActivityResult
             if (!File(imagePath).exists()) return@rememberLauncherForActivityResult
+            val matchedSeries =
+                findSeries(
+                    brQuery = baureihe,
+                    vehicleQuery = null,
+                    origin = photoOrigin
+                ) ?: return@rememberLauncherForActivityResult
             val idx =
                 collection.indexOfFirst {
-                    it.baureihe == baureihe && it.origin == photoOrigin
+                    it.origin == photoOrigin && matchedSeries.matchesStoredBaureihe(it.baureihe)
                 }
             if (idx >= 0) {
                 val existing = collection[idx]
@@ -187,14 +210,19 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         SearchInputPlate(
                             query = query,
                             onQueryChange = { query = it },
+                            vehicleQuery = vehicleQuery,
+                            onVehicleQueryChange = { vehicleQuery = it },
+                            showVehicleSlot = needsOverlapVehicleField(query, selectedOrigin),
                             selectedOrigin = selectedOrigin,
                             onOriginChange = { origin ->
                                 selectedOriginName = origin.name
                                 query = ""
+                                vehicleQuery = ""
                             }
                         )
                         SearchView(
                             validSeries = validSeries,
+                            overlapVehicleHint = overlapVehicleHint,
                             alreadyCollected = alreadyCollected,
                             hasCollectionPhoto = hasCollectionPhoto,
                             collectionSnapshotPath = collectionSnapshotPath,
@@ -214,7 +242,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                 validSeries?.let { series ->
                                     val existingIndex =
                                         collection.indexOfFirst {
-                                            it.baureihe == series.baureihe &&
+                                            series.matchesStoredBaureihe(it.baureihe) &&
                                                 it.origin == series.origin
                                         }
                                     if (existingIndex >= 0) {

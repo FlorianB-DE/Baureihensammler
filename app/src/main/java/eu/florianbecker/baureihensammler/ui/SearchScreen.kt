@@ -75,6 +75,7 @@ import eu.florianbecker.baureihensammler.data.plateAbbrev
 import eu.florianbecker.baureihensammler.data.fetchWikipediaSummary
 import eu.florianbecker.baureihensammler.search.calculatePoints
 import eu.florianbecker.baureihensammler.search.ghostBaureiheSuffix
+import eu.florianbecker.baureihensammler.search.needsOverlapVehicleField
 import java.io.File
 
 /** DB Corporate Red */
@@ -84,6 +85,9 @@ private val DbBrandRed = Color(0xFFEC0016)
 fun SearchInputPlate(
     query: String,
     onQueryChange: (String) -> Unit,
+    vehicleQuery: String,
+    onVehicleQueryChange: (String) -> Unit,
+    showVehicleSlot: Boolean,
     selectedOrigin: TrainSeriesOrigin,
     onOriginChange: (TrainSeriesOrigin) -> Unit,
 ) {
@@ -171,50 +175,134 @@ fun SearchInputPlate(
                         .background(colors.surfaceVariant)
                         .padding(start = 4.dp, end = 10.dp)
             ) {
-                if (query.isNotEmpty()) {
-                    Text(
-                        text =
-                            buildAnnotatedString {
-                                withStyle(
-                                    SpanStyle(
-                                        color = colors.onSurface,
-                                        fontWeight = FontWeight.SemiBold
+                if (showVehicleSlot) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier =
+                                Modifier.weight(1f)
+                                    .fillMaxHeight()
+                        ) {
+                            if (query.isNotEmpty()) {
+                                Text(
+                                    text =
+                                        buildAnnotatedString {
+                                            withStyle(
+                                                SpanStyle(
+                                                    color = colors.onSurface,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            ) { append(query) }
+                                            if (ghostSuffix.isNotEmpty()) {
+                                                withStyle(
+                                                    SpanStyle(
+                                                        color =
+                                                            colors.onSurfaceVariant.copy(
+                                                                alpha = 0.5f
+                                                            )
+                                                    )
+                                                ) { append(ghostSuffix) }
+                                            }
+                                        },
+                                    style = LocalTextStyle.current,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Clip,
+                                    modifier =
+                                        Modifier.align(Alignment.CenterStart)
+                                            .padding(contentPadding)
+                                            .wrapContentWidth()
+                                )
+                            }
+                            TextField(
+                                value = query,
+                                onValueChange = onQueryChange,
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                placeholder = {
+                                    Text(
+                                        "445",
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = colors.onSurfaceVariant.copy(alpha = 0.55f)
                                     )
-                                ) { append(query) }
-                                if (ghostSuffix.isNotEmpty()) {
+                                },
+                                colors = fieldColors,
+                            )
+                        }
+                        Text(
+                            "-",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = colors.onSurface,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        TextField(
+                            value = vehicleQuery,
+                            onValueChange = { nv ->
+                                onVehicleQueryChange(nv.filter { it.isDigit() }.take(4))
+                            },
+                            modifier = Modifier.widthIn(min = 64.dp).width(88.dp),
+                            singleLine = true,
+                            placeholder = {
+                                Text(
+                                    "Nr.",
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = colors.onSurfaceVariant.copy(alpha = 0.55f)
+                                )
+                            },
+                            colors =
+                                TextFieldDefaults.colors(
+                                    focusedContainerColor = colors.surfaceVariant,
+                                    unfocusedContainerColor = colors.surfaceVariant,
+                                ),
+                        )
+                    }
+                } else {
+                    if (query.isNotEmpty()) {
+                        Text(
+                            text =
+                                buildAnnotatedString {
                                     withStyle(
                                         SpanStyle(
-                                            color =
-                                                colors.onSurfaceVariant.copy(
-                                                    alpha = 0.5f
-                                                )
+                                            color = colors.onSurface,
+                                            fontWeight = FontWeight.SemiBold
                                         )
-                                    ) { append(ghostSuffix) }
-                                }
-                            },
-                        style = LocalTextStyle.current,
-                        maxLines = 1,
-                        overflow = TextOverflow.Clip,
-                        modifier =
-                            Modifier.align(Alignment.CenterStart)
-                                .padding(contentPadding)
-                                .wrapContentWidth()
+                                    ) { append(query) }
+                                    if (ghostSuffix.isNotEmpty()) {
+                                        withStyle(
+                                            SpanStyle(
+                                                color =
+                                                    colors.onSurfaceVariant.copy(
+                                                        alpha = 0.5f
+                                                    )
+                                            )
+                                        ) { append(ghostSuffix) }
+                                    }
+                                },
+                            style = LocalTextStyle.current,
+                            maxLines = 1,
+                            overflow = TextOverflow.Clip,
+                            modifier =
+                                Modifier.align(Alignment.CenterStart)
+                                    .padding(contentPadding)
+                                    .wrapContentWidth()
+                        )
+                    }
+                    TextField(
+                        value = query,
+                        onValueChange = onQueryChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "z. B. 401",
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.onSurfaceVariant.copy(alpha = 0.55f)
+                            )
+                        },
+                        colors = fieldColors,
                     )
                 }
-                TextField(
-                    value = query,
-                    onValueChange = onQueryChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            "z. B. 401",
-                            fontWeight = FontWeight.SemiBold,
-                            color = colors.onSurfaceVariant.copy(alpha = 0.55f)
-                        )
-                    },
-                    colors = fieldColors,
-                )
             }
         }
     }
@@ -223,6 +311,7 @@ fun SearchInputPlate(
 @Composable
 fun SearchView(
     validSeries: TrainSeries?,
+    overlapVehicleHint: Boolean,
     alreadyCollected: Boolean,
     hasCollectionPhoto: Boolean,
     collectionSnapshotPath: String?,
@@ -238,6 +327,16 @@ fun SearchView(
     val focusManager = LocalFocusManager.current
     var showMoreInfos by rememberSaveable(validSeries?.baureihe) { mutableStateOf(true) }
     val detailsVisible = !imeVisible && showMoreInfos
+
+    if (overlapVehicleHint) {
+        Text(
+            text =
+                "Mehrere Züge mit dieser Baureihe: bitte rechts nach dem Bindestrich die Wagennummer eingeben (z. B. 050 für Twindexx, 120 für KISS).",
+            style = MaterialTheme.typography.bodySmall,
+            color = colors.primary,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+    }
 
     validSeries?.let { series ->
         var wikiSummary by remember(series.baureihe) { mutableStateOf<String?>(null) }

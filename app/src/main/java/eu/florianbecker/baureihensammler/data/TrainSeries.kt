@@ -48,6 +48,14 @@ data class TrainSeries(
     val fleetEstimate: Int,
     val wikiArticleTitle: String,
     val origin: TrainSeriesOrigin = TrainSeriesOrigin.DB,
+    /** Weitere Eingaben, die dieselbe Baureihe finden (z. B. `0445` → wie `445`). */
+    val aliases: List<String> = emptyList(),
+    /**
+     * Wenn mehrere Züge dieselbe Grund-BR teilen: gemeinsamer Schlüssel (z. B. `445`).
+     * Dann ist [overlapVehicleRange] die Wagennummer (üblicherweise Ordnungsnummer im Verband).
+     */
+    val overlapGroupKey: String? = null,
+    val overlapVehicleRange: IntRange? = null,
 ) {
     val wikiArticleUrl: String
         get() = "https://de.wikipedia.org/wiki/${encodeForWiki(wikiArticleTitle)}"
@@ -195,11 +203,38 @@ object AlphaTrainSeriesRepository {
         TrainSeries("8443", "Talent 2", "Triebzug", 160, 40, "DB-Baureihe_8443"),
         TrainSeries("6442", "Talent 3+", "Triebzug", 160, 40, "DB-Baureihe_6442"),
         TrainSeries("6443", "Talent 3+", "Triebzug", 160, 40, "DB-Baureihe_6443"),
-        TrainSeries("445", "Stadler KISS", "Triebzug", 160, 20, "DB-Baureihe_445"),
-        TrainSeries("446", "Bombardier Twindexx Vario", "Triebzug", 160, 20, "DB-Baureihe_446"),
+        TrainSeries(
+            baureihe = "445 (Twindexx Vario)",
+            name = "Bombardier Twindexx Vario",
+            category = "Triebzug",
+            vmaxKmh = 160,
+            fleetEstimate = 104,
+            wikiArticleTitle = "Bombardier_Twindexx_Vario",
+            overlapGroupKey = "445",
+            overlapVehicleRange = 1..104,
+            aliases = listOf("0445"),
+        ),
+        TrainSeries(
+            baureihe = "445",
+            name = "Stadler KISS",
+            category = "Triebzug",
+            vmaxKmh = 160,
+            fleetEstimate = 20,
+            wikiArticleTitle = "Stadler_KISS",
+            overlapGroupKey = "445",
+            overlapVehicleRange = 116..133,
+            aliases = listOf("0445"),
+        ),
         TrainSeries("447", "Alstom Coradia Max", "Triebzug", 160, 20, "DB-Baureihe_447"),
-        TrainSeries("1462", "Siemens Desiro HC", "Triebzug", 190, 30, "DB-Baureihe_1462"),
-        TrainSeries("4462", "Siemens Desiro HC", "Triebzug", 190, 30, "DB-Baureihe_4462"),
-        TrainSeries("463", "Mireo", "Triebzug", 160, 90, "DB-Baureihe_463")
+        TrainSeries(
+            baureihe = "1462",
+            name = "Siemens Desiro HC",
+            category = "Triebzug",
+            vmaxKmh = 190,
+            fleetEstimate = 20,
+            wikiArticleTitle = "Siemens_Desiro_HC",
+            aliases = listOf("01462", "4462", "04462"),
+        ),
+        TrainSeries("463", "Mireo", "Triebzug", 160, 90, "Siemens_Mireo")
     )
 }
