@@ -3,13 +3,51 @@ package eu.florianbecker.baureihensammler.data
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+/**
+ * Bahngesellschaft / Datenherkunft der Baureihe.
+ * Aktuell nur [DB] in den Stammdaten; weitere Werte für geplante Kataloge (z. B. SBB, ÖBB).
+ */
+enum class TrainSeriesOrigin {
+    /** Deutsche Bahn (inkl. historischer DR-/DB-Baureihen in diesem Katalog). */
+    DB,
+
+    /** Schweizerische Bundesbahnen — reserviert für zukünftige Erweiterungen. */
+    SBB,
+
+    /** Österreichische Bundesbahnen — reserviert für zukünftige Erweiterungen. */
+    OBB,
+    ;
+
+    companion object {
+        fun fromName(raw: String?): TrainSeriesOrigin =
+            entries.find { it.name == raw } ?: DB
+    }
+}
+
+/** Kurztext im Kennzeichenfeld (links neben „BR“). */
+fun TrainSeriesOrigin.plateAbbrev(): String =
+    when (this) {
+        TrainSeriesOrigin.DB -> "DB"
+        TrainSeriesOrigin.SBB -> "SBB"
+        TrainSeriesOrigin.OBB -> "ÖBB"
+    }
+
+/** Bezeichnung im Auswahlmenü. */
+fun TrainSeriesOrigin.menuLabel(): String =
+    when (this) {
+        TrainSeriesOrigin.DB -> "Deutsche Bahn (DB)"
+        TrainSeriesOrigin.SBB -> "Schweizerische Bundesbahnen (SBB)"
+        TrainSeriesOrigin.OBB -> "Österreichische Bundesbahnen (ÖBB)"
+    }
+
 data class TrainSeries(
     val baureihe: String,
     val name: String,
     val category: String,
     val vmaxKmh: Int,
     val fleetEstimate: Int,
-    val wikiArticleTitle: String
+    val wikiArticleTitle: String,
+    val origin: TrainSeriesOrigin = TrainSeriesOrigin.DB,
 ) {
     val wikiArticleUrl: String
         get() = "https://de.wikipedia.org/wiki/${encodeForWiki(wikiArticleTitle)}"

@@ -28,10 +28,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import eu.florianbecker.baureihensammler.collection.CollectionEntry
+import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
+import eu.florianbecker.baureihensammler.data.menuLabel
+import eu.florianbecker.baureihensammler.data.plateAbbrev
 
 @Composable
 fun CollectionScreen(
     collection: List<CollectionEntry>,
+    emptyFilterHintOrigin: TrainSeriesOrigin = TrainSeriesOrigin.DB,
+    hasAnyCollectionEntry: Boolean = true,
     onResetCollection: () -> Unit,
     onDeletePhoto: (CollectionEntry) -> Unit
 ) {
@@ -39,7 +44,7 @@ fun CollectionScreen(
     var showResetDialog by rememberSaveable { mutableStateOf(false) }
     Text("Meine Sammlung", fontWeight = FontWeight.Bold, color = colors.onBackground)
     Spacer(modifier = Modifier.height(6.dp))
-    OutlinedButton(onClick = { showResetDialog = true }, enabled = collection.isNotEmpty()) {
+    OutlinedButton(onClick = { showResetDialog = true }, enabled = hasAnyCollectionEntry) {
         Text("Sammlung zurucksetzen")
     }
 
@@ -67,7 +72,15 @@ fun CollectionScreen(
     }
     Spacer(modifier = Modifier.height(10.dp))
     if (collection.isEmpty()) {
-        Text("Noch nichts gesammelt.", color = colors.onSurface)
+        Text(
+            text =
+                if (hasAnyCollectionEntry) {
+                    "Keine Einträge für ${emptyFilterHintOrigin.menuLabel()} in der Sammlung."
+                } else {
+                    "Noch nichts gesammelt."
+                },
+            color = colors.onSurface
+        )
         return
     }
     LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -80,7 +93,10 @@ fun CollectionScreen(
                     modifier = Modifier.padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text("BR ${entry.baureihe} - ${entry.name}", fontWeight = FontWeight.SemiBold)
+                    Text(
+                        "${entry.origin.plateAbbrev()} · BR ${entry.baureihe} — ${entry.name}",
+                        fontWeight = FontWeight.SemiBold
+                    )
                     Text("${entry.category} - Vmax ${entry.vmaxKmh} km/h")
                     Text("Gesammelt am: ${entry.seenAt}")
                     Text("Punkte: ${entry.totalPoints}")

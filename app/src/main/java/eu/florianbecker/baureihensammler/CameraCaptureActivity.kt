@@ -50,6 +50,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
 import java.io.File
 import java.io.FileOutputStream
@@ -61,13 +62,14 @@ class CameraCaptureActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val baureihe = intent.getStringExtra(EXTRA_BAUREIHE) ?: ""
+        val origin = TrainSeriesOrigin.fromName(intent.getStringExtra(EXTRA_ORIGIN))
         setContent {
             BaureihensammlerTheme {
                 CameraCaptureScreen(
                     baureihe = baureihe,
                     onBack = { finish() },
                     onBindCamera = { bindCamera() },
-                    onCapture = { capture(baureihe) }
+                    onCapture = { capture(baureihe, origin) }
                 )
             }
         }
@@ -93,7 +95,7 @@ class CameraCaptureActivity : ComponentActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun capture(baureihe: String) {
+    private fun capture(baureihe: String, origin: TrainSeriesOrigin) {
         val capture = imageCapture ?: return
         val snapshotsDir = File(filesDir, "snapshots")
         if (!snapshotsDir.exists()) snapshotsDir.mkdirs()
@@ -107,6 +109,7 @@ class CameraCaptureActivity : ComponentActivity() {
                     cropCenter16by9(file)
                     val resultIntent = Intent()
                         .putExtra(EXTRA_BAUREIHE, baureihe)
+                        .putExtra(EXTRA_ORIGIN, origin.name)
                         .putExtra(EXTRA_IMAGE_PATH, file.absolutePath)
                     setResult(RESULT_OK, resultIntent)
                     finish()
@@ -151,10 +154,16 @@ class CameraCaptureActivity : ComponentActivity() {
     companion object {
         const val EXTRA_BAUREIHE = "extra_baureihe"
         const val EXTRA_IMAGE_PATH = "extra_image_path"
+        const val EXTRA_ORIGIN = "extra_origin"
 
-        fun createIntent(context: Context, baureihe: String): Intent {
+        fun createIntent(
+            context: Context,
+            baureihe: String,
+            origin: TrainSeriesOrigin = TrainSeriesOrigin.DB
+        ): Intent {
             return Intent(context, CameraCaptureActivity::class.java)
                 .putExtra(EXTRA_BAUREIHE, baureihe)
+                .putExtra(EXTRA_ORIGIN, origin.name)
         }
     }
 }

@@ -29,6 +29,8 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,6 +69,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import eu.florianbecker.baureihensammler.R
 import eu.florianbecker.baureihensammler.data.TrainSeries
+import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
+import eu.florianbecker.baureihensammler.data.menuLabel
+import eu.florianbecker.baureihensammler.data.plateAbbrev
 import eu.florianbecker.baureihensammler.data.fetchWikipediaSummary
 import eu.florianbecker.baureihensammler.search.calculatePoints
 import eu.florianbecker.baureihensammler.search.ghostBaureiheSuffix
@@ -76,9 +81,15 @@ import java.io.File
 private val DbBrandRed = Color(0xFFEC0016)
 
 @Composable
-fun SearchInputPlate(query: String, onQueryChange: (String) -> Unit) {
+fun SearchInputPlate(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    selectedOrigin: TrainSeriesOrigin,
+    onOriginChange: (TrainSeriesOrigin) -> Unit,
+) {
     val colors = MaterialTheme.colorScheme
-    val ghostSuffix = ghostBaureiheSuffix(query)
+    var originMenuExpanded by remember { mutableStateOf(false) }
+    val ghostSuffix = ghostBaureiheSuffix(query, selectedOrigin)
     val contentPadding = TextFieldDefaults.contentPaddingWithoutLabel()
     val plateUnderline = DbBrandRed
     val fieldColors =
@@ -106,32 +117,52 @@ fun SearchInputPlate(query: String, onQueryChange: (String) -> Unit) {
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
+            Box(
                 modifier =
-                    Modifier.width(50.dp)
+                    Modifier.width(56.dp)
                         .fillMaxHeight()
                         .background(DbBrandRed)
-                        .padding(vertical = 6.dp, horizontal = 4.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    "DB",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.labelLarge,
-                    lineHeight = MaterialTheme.typography.labelLarge.fontSize
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    "BR",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.labelLarge,
-                    lineHeight = MaterialTheme.typography.labelLarge.fontSize,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Column(
+                    modifier =
+                        Modifier.fillMaxHeight()
+                            .clickable { originMenuExpanded = true }
+                            .padding(vertical = 6.dp, horizontal = 4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        selectedOrigin.plateAbbrev(),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelLarge,
+                        lineHeight = MaterialTheme.typography.labelLarge.fontSize
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        "BR",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelLarge,
+                        lineHeight = MaterialTheme.typography.labelLarge.fontSize,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                DropdownMenu(
+                    expanded = originMenuExpanded,
+                    onDismissRequest = { originMenuExpanded = false }
+                ) {
+                    TrainSeriesOrigin.entries.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option.menuLabel()) },
+                            onClick = {
+                                onOriginChange(option)
+                                originMenuExpanded = false
+                            }
+                        )
+                    }
+                }
             }
             Box(
                 modifier =

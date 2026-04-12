@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.florianbecker.baureihensammler.CameraCaptureActivity
-import eu.florianbecker.baureihensammler.data.AlphaTrainSeriesRepository
+import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
 import eu.florianbecker.baureihensammler.collection.CollectionEntry
 import eu.florianbecker.baureihensammler.collection.collectionDateFormatter
 import eu.florianbecker.baureihensammler.collection.loadCollection
@@ -40,6 +40,7 @@ import eu.florianbecker.baureihensammler.collection.loadPrivacyOfflineMode
 import eu.florianbecker.baureihensammler.collection.saveCollection
 import eu.florianbecker.baureihensammler.collection.savePrivacyOfflineMode
 import eu.florianbecker.baureihensammler.search.calculatePoints
+import eu.florianbecker.baureihensammler.search.catalogForOrigin
 import eu.florianbecker.baureihensammler.search.findSeries
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
 import eu.florianbecker.baureihensammler.util.clearAllSnapshots
@@ -56,16 +57,21 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var query by rememberSaveable { mutableStateOf("") }
     var currentView by rememberSaveable { mutableStateOf("search") }
+    var selectedOriginName by rememberSaveable { mutableStateOf(TrainSeriesOrigin.DB.name) }
+    val selectedOrigin = TrainSeriesOrigin.fromName(selectedOriginName)
     val collection = remember { mutableStateListOf<CollectionEntry>() }
-    val validSeries = findSeries(query)
+    val validSeries = findSeries(query, selectedOrigin)
     val alreadyCollected =
-        validSeries?.let { series -> collection.any { it.baureihe == series.baureihe } }
+        validSeries?.let { series ->
+            collection.any { it.baureihe == series.baureihe && it.origin == series.origin }
+        }
             ?: false
     val collectionSnapshotPath =
         validSeries?.let { series ->
-            collection.firstOrNull { it.baureihe == series.baureihe }?.imagePath?.takeIf {
-                it.isNotBlank()
-            }
+            collection
+                .firstOrNull { it.baureihe == series.baureihe && it.origin == series.origin }
+                ?.imagePath
+                ?.takeIf { it.isNotBlank() }
         }
     val hasCollectionPhoto = collectionSnapshotPath != null
 
@@ -84,11 +90,16 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
             val baureihe =
                 data.getStringExtra(CameraCaptureActivity.EXTRA_BAUREIHE)
                     ?: return@rememberLauncherForActivityResult
+            val photoOrigin =
+                TrainSeriesOrigin.fromName(data.getStringExtra(CameraCaptureActivity.EXTRA_ORIGIN))
             val imagePath =
                 data.getStringExtra(CameraCaptureActivity.EXTRA_IMAGE_PATH)
                     ?: return@rememberLauncherForActivityResult
             if (!File(imagePath).exists()) return@rememberLauncherForActivityResult
-            val idx = collection.indexOfFirst { it.baureihe == baureihe }
+            val idx =
+                collection.indexOfFirst {
+                    it.baureihe == baureihe && it.origin == photoOrigin
+                }
             if (idx >= 0) {
                 val existing = collection[idx]
                 collection[idx] = existing.copy(imagePath = imagePath)
@@ -96,12 +107,13 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
             }
         }
 
-    val totalPoints = collection.sumOf { it.totalPoints }
+    val collectionForSelectedOrigin = collection.filter { it.origin == selectedOrigin }
+    val catalogSize = catalogForOrigin(selectedOrigin).size
+    val totalPoints = collectionForSelectedOrigin.sumOf { it.totalPoints }
+    val discoveredForOrigin = collectionForSelectedOrigin.size
     val progress =
-        if (AlphaTrainSeriesRepository.items.isEmpty()) 0f
-        else {
-            collection.size.toFloat() / AlphaTrainSeriesRepository.items.size.toFloat()
-        }
+        if (catalogSize == 0) 0f
+        else discoveredForOrigin.toFloat() / catalogSize.toFloat()
 
     val imeVisible = rememberImeVisible()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -172,7 +184,15 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                     )
 
                     if (currentView == "search") {
-                        SearchInputPlate(query = query, onQueryChange = { query = it })
+                        SearchInputPlate(
+                            query = query,
+                            onQueryChange = { query = it },
+                            selectedOrigin = selectedOrigin,
+                            onOriginChange = { origin ->
+                                selectedOriginName = origin.name
+                                query = ""
+                            }
+                        )
                         SearchView(
                             validSeries = validSeries,
                             alreadyCollected = alreadyCollected,
@@ -181,15 +201,21 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                             imeVisible = imeVisible,
                             blockExternalWikiSummaries = blockExternalWikiSummaries,
                             onTakeSnapshot = {
-                                val target = validSeries?.baureihe ?: return@SearchView
-                                val intent = CameraCaptureActivity.createIntent(context, target)
+                                val series = validSeries ?: return@SearchView
+                                val intent =
+                                    CameraCaptureActivity.createIntent(
+                                        context,
+                                        series.baureihe,
+                                        series.origin
+                                    )
                                 takeSnapshotLauncher.launch(intent)
                             },
                             onToggleCollected = {
                                 validSeries?.let { series ->
                                     val existingIndex =
                                         collection.indexOfFirst {
-                                            it.baureihe == series.baureihe
+                                            it.baureihe == series.baureihe &&
+                                                it.origin == series.origin
                                         }
                                     if (existingIndex >= 0) {
                                         deleteSnapshotFile(collection[existingIndex].imagePath)
@@ -207,7 +233,8 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                                 fleetEstimate = series.fleetEstimate,
                                                 seenAt = now,
                                                 totalPoints = pointsGain,
-                                                imagePath = null
+                                                imagePath = null,
+                                                origin = series.origin
                                             )
                                         )
                                     }
@@ -218,7 +245,9 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         )
                     } else if (currentView == "collection") {
                         CollectionScreen(
-                            collection = collection,
+                            collection = collectionForSelectedOrigin,
+                            emptyFilterHintOrigin = selectedOrigin,
+                            hasAnyCollectionEntry = collection.isNotEmpty(),
                             onResetCollection = {
                                 clearAllSnapshots(collection)
                                 collection.clear()
@@ -228,7 +257,8 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                 deleteSnapshotFile(entry.imagePath)
                                 val index =
                                     collection.indexOfFirst {
-                                        it.baureihe == entry.baureihe
+                                        it.baureihe == entry.baureihe &&
+                                            it.origin == entry.origin
                                     }
                                 if (index >= 0) {
                                     collection[index] = collection[index].copy(imagePath = null)
@@ -250,8 +280,8 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                 if (showStatsRow && currentView != "settings") {
                     StatsRow(
                         points = totalPoints,
-                        discovered = collection.size,
-                        total = AlphaTrainSeriesRepository.items.size,
+                        discovered = discoveredForOrigin,
+                        total = catalogSize,
                         progress = progress
                     )
                 }

@@ -1,6 +1,7 @@
 package eu.florianbecker.baureihensammler.collection
 
 import android.content.Context
+import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.format.DateTimeFormatter
@@ -36,6 +37,7 @@ fun saveCollection(context: Context, items: List<CollectionEntry>) {
                 .put("seenAt", item.seenAt)
                 .put("totalPoints", item.totalPoints)
                 .put("imagePath", item.imagePath)
+                .put("origin", item.origin.name)
         array.put(obj)
     }
     context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -62,7 +64,8 @@ fun loadCollection(context: Context): List<CollectionEntry> {
                 fleetEstimate = obj.getInt("fleetEstimate"),
                 seenAt = obj.getString("seenAt"),
                 totalPoints = obj.getInt("totalPoints"),
-                imagePath = obj.optString("imagePath").ifBlank { null }
+                imagePath = obj.optString("imagePath").ifBlank { null },
+                origin = TrainSeriesOrigin.fromName(obj.optString("origin"))
             )
         )
     }
