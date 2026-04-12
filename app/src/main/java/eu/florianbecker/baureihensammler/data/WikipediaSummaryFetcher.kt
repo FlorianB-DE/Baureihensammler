@@ -1,6 +1,7 @@
 package eu.florianbecker.baureihensammler.data
 
 import androidx.core.text.HtmlCompat
+import eu.florianbecker.baureihensammler.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -17,7 +18,7 @@ suspend fun fetchWikipediaSummary(apiUrl: String): String? = withContext(Dispatc
             setRequestProperty("Accept", "application/json; charset=utf-8")
             setRequestProperty(
                 "User-Agent",
-                "Baureihensammler/1.0 (Android; eu.florianbecker.baureihensammler)"
+                "Baureihensammler/1.0 (Android; ${BuildConfig.APPLICATION_ID})"
             )
         }
         if (conn.responseCode != HttpURLConnection.HTTP_OK) return@withContext null
