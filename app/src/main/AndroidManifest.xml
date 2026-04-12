@@ -30,7 +30,7 @@
         <activity
             android:name=".CameraCaptureActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Baureihensammler" />
 
         <provider
