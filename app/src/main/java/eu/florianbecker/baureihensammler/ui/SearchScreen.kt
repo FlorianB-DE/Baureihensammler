@@ -51,6 +51,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -77,6 +79,7 @@ import eu.florianbecker.baureihensammler.search.calculatePoints
 import eu.florianbecker.baureihensammler.search.ghostBaureiheSuffix
 import eu.florianbecker.baureihensammler.search.needsOverlapVehicleField
 import java.io.File
+import kotlinx.coroutines.delay
 
 /** DB Corporate Red */
 private val DbBrandRed = Color(0xFFEC0016)
@@ -92,8 +95,18 @@ fun SearchInputPlate(
     onOriginChange: (TrainSeriesOrigin) -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
+    val keyboard = LocalSoftwareKeyboardController.current
+    val vehicleNrFocusRequester = remember { FocusRequester() }
     var originMenuExpanded by remember { mutableStateOf(false) }
     val ghostSuffix = ghostBaureiheSuffix(query, selectedOrigin)
+
+    LaunchedEffect(showVehicleSlot, vehicleQuery) {
+        if (!showVehicleSlot) return@LaunchedEffect
+        if (vehicleQuery.isNotEmpty()) return@LaunchedEffect
+        delay(48)
+        vehicleNrFocusRequester.requestFocus()
+        keyboard?.show()
+    }
     val contentPadding = TextFieldDefaults.contentPaddingWithoutLabel()
     val plateUnderline = DbBrandRed
     val fieldColors =
@@ -241,7 +254,10 @@ fun SearchInputPlate(
                             onValueChange = { nv ->
                                 onVehicleQueryChange(nv.filter { it.isDigit() }.take(4))
                             },
-                            modifier = Modifier.widthIn(min = 64.dp).width(88.dp),
+                            modifier =
+                                Modifier.focusRequester(vehicleNrFocusRequester)
+                                    .widthIn(min = 64.dp)
+                                    .width(88.dp),
                             singleLine = true,
                             placeholder = {
                                 Text(
