@@ -1,6 +1,14 @@
 # Baureihensammler
+<img width="240" height="240" alt="image" src="https://github.com/user-attachments/assets/01514683-f457-4df5-99e4-272310037a64" />
 
 Android app for collecting train classes ("Baureihen"), tracking discoveries, and attaching your own snapshots.
+
+## Gallery
+<img width="155" height="296" alt="image" src="https://github.com/user-attachments/assets/efa90b43-f38f-4abb-b0e5-f4dbee001630" />
+<img width="155" height="296" alt="image" src="https://github.com/user-attachments/assets/b47b30ce-b47a-43f2-832b-e0a32cacc3ad" />
+<img width="155" height="296" alt="image" src="https://github.com/user-attachments/assets/ff7a3be3-8d90-4b33-9fbd-cf54d76334e7" />
+<img width="155" height="296" alt="image" src="https://github.com/user-attachments/assets/a8f9d6c9-29e3-4eee-a0a9-8a79dad237d3" />
+
 
 ## Features
 
