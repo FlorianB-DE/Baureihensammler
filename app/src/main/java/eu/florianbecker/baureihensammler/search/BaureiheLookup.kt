@@ -72,11 +72,26 @@ fun findSeries(
         return s
     }
 
-    val v = vehicleQuery?.trim()?.toIntOrNull() ?: return null
-    return candidates.singleOrNull { series ->
+    val vehicleToken = vehicleQuery?.trim() ?: return null
+    val v = vehicleToken.toIntOrNull() ?: return null
+    val vehicleDigits = vehicleToken.takeIf { it.matches(Regex("""^\d+$""")) }?.length
+
+    val rangeMatches = candidates.filter { series ->
         val range = series.overlapVehicleRange
         range != null && v in range
     }
+
+    if (rangeMatches.size <= 1) return rangeMatches.singleOrNull()
+
+    if (vehicleDigits != null) {
+        val digitMatches =
+            rangeMatches.filter { series ->
+                series.overlapVehicleDigits == vehicleDigits
+            }
+        if (digitMatches.size == 1) return digitMatches.single()
+    }
+
+    return rangeMatches.singleOrNull()
 }
 
 fun calculatePoints(fleetEstimate: Int): Int =
