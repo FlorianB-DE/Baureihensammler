@@ -52,10 +52,11 @@ data class TrainSeries(
     val aliases: List<String> = emptyList(),
     /**
      * Wenn mehrere Züge dieselbe Grund-BR teilen: gemeinsamer Schlüssel (z. B. `445`).
-     * Dann ist [overlapVehicleRange] die Wagennummer (üblicherweise Ordnungsnummer im Verband).
+     * Dann sind [overlapVehicleRanges] die möglichen Wagennummern-Bereiche
+     * (üblicherweise Ordnungsnummern im Verband).
      */
     val overlapGroupKey: String? = null,
-    val overlapVehicleRange: IntRange? = null,
+    val overlapVehicleRanges: List<IntRange> = emptyList(),
     /** Erwartete Stellenanzahl der Wagennummer (z. B. 2 für `01`, 3 für `001`). */
     val overlapVehicleDigits: Int? = null,
 ) {
@@ -200,18 +201,16 @@ object AlphaTrainSeriesRepository {
             wikiArticleTitle = "DB-Baureihe_424",
             aliases = listOf("434", "424.0", "424.5", "434.0", "434.5"),
         ),
-        TrainSeries(
-            baureihe = "425 (historisch, ex ET 25)",
-            name = "DB-Baureihe 425 (ex DR ET 25)",
-            category = "Triebzug",
-            vmaxKmh = 120,
-            fleetEstimate = 39,
-            wikiArticleTitle = "DR-Baureihe_ET_25",
-            overlapGroupKey = "425",
-            overlapVehicleRange = 1..99,
-            overlapVehicleDigits = 2,
-            aliases = listOf("0425"),
-        ),
+        // TODO: Find Fix for DR ET 25 (DB BR 425)
+        // TrainSeries(
+        //     baureihe = "425 (historisch, ex ET 25)",
+        //     name = "DB-Baureihe 425 (ex DR ET 25)",
+        //     category = "Triebzug",
+        //     vmaxKmh = 120,
+        //     fleetEstimate = 39,
+        //     wikiArticleTitle = "DR-Baureihe_ET_25",
+        //     overlapGroupKey = "425",
+        // ),
         TrainSeries(
             baureihe = "425 (1999)",
             name = "DB-Baureihe 425 (1999)",
@@ -220,9 +219,7 @@ object AlphaTrainSeriesRepository {
             fleetEstimate = 250,
             wikiArticleTitle = "DB-Baureihe_425_(1999)",
             overlapGroupKey = "425",
-            overlapVehicleRange = 1..999,
-            overlapVehicleDigits = 3,
-            aliases = listOf("0425"),
+            overlapVehicleRanges = listOf(100..399, 500..999),
         ),
         TrainSeries("435", "S-Bahn ET 435", "Triebzug", 160, 120, "DB-Baureihe_425"),
         TrainSeries("426", "Regional ET 426", "Triebzug", 160, 60, "DB-Baureihe_426"),
@@ -274,7 +271,7 @@ object AlphaTrainSeriesRepository {
             fleetEstimate = 104,
             wikiArticleTitle = "Bombardier_Twindexx_Vario",
             overlapGroupKey = "445",
-            overlapVehicleRange = 1..104,
+            overlapVehicleRanges = listOf(1..104),
             aliases = listOf("0445"),
         ),
         TrainSeries(
@@ -285,7 +282,7 @@ object AlphaTrainSeriesRepository {
             fleetEstimate = 20,
             wikiArticleTitle = "Stadler_KISS",
             overlapGroupKey = "445",
-            overlapVehicleRange = 116..133,
+            overlapVehicleRanges = listOf(116..133),
             aliases = listOf("0445"),
         ),
         TrainSeries("447", "Alstom Coradia Max", "Triebzug", 160, 20, "Alstom_Coradia_Max"),

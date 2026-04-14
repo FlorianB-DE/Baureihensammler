@@ -66,7 +66,7 @@ fun findSeries(
     if (candidates.size == 1) {
         val s = candidates.single()
         val v = vehicleQuery?.trim()?.toIntOrNull()
-        if (s.overlapVehicleRange != null && v != null && v !in s.overlapVehicleRange) {
+        if (s.overlapVehicleRanges.isNotEmpty() && v != null && !s.matchesVehicleNumber(v)) {
             return null
         }
         return s
@@ -76,10 +76,7 @@ fun findSeries(
     val v = vehicleToken.toIntOrNull() ?: return null
     val vehicleDigits = vehicleToken.takeIf { it.matches(Regex("""^\d+$""")) }?.length
 
-    val rangeMatches = candidates.filter { series ->
-        val range = series.overlapVehicleRange
-        range != null && v in range
-    }
+    val rangeMatches = candidates.filter { series -> series.matchesVehicleNumber(v) }
 
     if (rangeMatches.size <= 1) return rangeMatches.singleOrNull()
 
@@ -93,6 +90,9 @@ fun findSeries(
 
     return rangeMatches.singleOrNull()
 }
+
+private fun TrainSeries.matchesVehicleNumber(vehicleNumber: Int): Boolean =
+    overlapVehicleRanges.any { vehicleNumber in it }
 
 fun calculatePoints(fleetEstimate: Int): Int =
     (1200 / fleetEstimate.coerceAtLeast(20)).coerceAtLeast(1)
