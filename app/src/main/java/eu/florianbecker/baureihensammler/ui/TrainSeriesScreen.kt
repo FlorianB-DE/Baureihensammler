@@ -36,8 +36,10 @@ import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
 import eu.florianbecker.baureihensammler.collection.CollectionEntry
 import eu.florianbecker.baureihensammler.collection.collectionDateFormatter
 import eu.florianbecker.baureihensammler.collection.loadCollection
+import eu.florianbecker.baureihensammler.collection.loadDebugMode
 import eu.florianbecker.baureihensammler.collection.loadPrivacyOfflineMode
 import eu.florianbecker.baureihensammler.collection.saveCollection
+import eu.florianbecker.baureihensammler.collection.saveDebugMode
 import eu.florianbecker.baureihensammler.collection.savePrivacyOfflineMode
 import eu.florianbecker.baureihensammler.search.calculatePoints
 import eu.florianbecker.baureihensammler.search.catalogForOrigin
@@ -47,9 +49,11 @@ import eu.florianbecker.baureihensammler.search.needsOverlapVehicleField
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
 import eu.florianbecker.baureihensammler.util.clearAllSnapshots
 import eu.florianbecker.baureihensammler.util.deleteSnapshotFile
+import eu.florianbecker.baureihensammler.util.DebugLogStore
 import eu.florianbecker.baureihensammler.util.openUrl
 import java.io.File
 import java.time.LocalDateTime
+import android.widget.Toast
 import kotlinx.coroutines.launch
 
 private val MinHeightToShowStatsWithIme = 280.dp
@@ -142,17 +146,20 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var blockExternalWikiSummaries by remember { mutableStateOf(loadPrivacyOfflineMode(context)) }
+    var debugModeEnabled by remember { mutableStateOf(loadDebugMode(context)) }
 
     BackHandler(
         enabled =
             drawerState.currentValue == DrawerValue.Open ||
                 currentView == "collection" ||
-                currentView == "settings"
+                currentView == "settings" ||
+                currentView == "logs"
     ) {
         when {
             drawerState.currentValue == DrawerValue.Open -> scope.launch { drawerState.close() }
             currentView == "collection" -> currentView = "search"
             currentView == "settings" -> currentView = "search"
+            currentView == "logs" -> currentView = "search"
         }
     }
 
@@ -162,6 +169,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
             ModalDrawerSheet {
                 AppDrawerNavigation(
                     currentView = currentView,
+                    debugModeEnabled = debugModeEnabled,
                     onNavigate = { destination ->
                         scope.launch {
                             drawerState.close()
@@ -230,13 +238,27 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                             blockExternalWikiSummaries = blockExternalWikiSummaries,
                             onTakeSnapshot = {
                                 val series = validSeries ?: return@SearchView
-                                val intent =
-                                    CameraCaptureActivity.createIntent(
-                                        context,
-                                        series.baureihe,
-                                        series.origin
+                                try {
+                                    val intent =
+                                        CameraCaptureActivity.createIntent(
+                                            context,
+                                            series.baureihe,
+                                            series.origin
+                                        )
+                                    takeSnapshotLauncher.launch(intent)
+                                } catch (t: Throwable) {
+                                    DebugLogStore.logError(
+                                        context = context,
+                                        source = "TrainSeriesScreen.onTakeSnapshot",
+                                        message = "Kamera konnte nicht gestartet werden (BR=${series.baureihe}).",
+                                        throwable = t
                                     )
-                                takeSnapshotLauncher.launch(intent)
+                                    Toast.makeText(
+                                        context,
+                                        "Kamera konnte nicht gestartet werden.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             },
                             onToggleCollected = {
                                 validSeries?.let { series ->
@@ -294,18 +316,25 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                 }
                             }
                         )
-                    } else {
+                    } else if (currentView == "settings") {
                         SettingsScreen(
                             blockExternalWikiSummaries = blockExternalWikiSummaries,
                             onBlockExternalWikiSummariesChange = { v ->
                                 blockExternalWikiSummaries = v
                                 savePrivacyOfflineMode(context, v)
-                            }
+                            },
+                            debugModeEnabled = debugModeEnabled,
+                            onDebugModeEnabledChange = { v ->
+                                debugModeEnabled = v
+                                saveDebugMode(context, v)
+                                if (!v && currentView == "logs") currentView = "settings"
+                            },
                         )
+                    } else {
+                        LogsScreen(logs = DebugLogStore.listLogs(context))
                     }
                 }
-
-                if (showStatsRow && currentView != "settings") {
+                if (showStatsRow && currentView != "settings" && currentView != "logs") {
                     StatsRow(
                         points = totalPoints,
                         discovered = discoveredForOrigin,

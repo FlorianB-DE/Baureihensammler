@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter
 const val PREFS_NAME = "baureihen_prefs"
 const val KEY_COLLECTION = "collection_entries"
 const val KEY_PRIVACY_OFFLINE_MODE = "privacy_offline_mode"
+const val KEY_DEBUG_MODE = "debug_mode"
 
 val collectionDateFormatter: DateTimeFormatter =
     DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
@@ -21,6 +22,17 @@ fun savePrivacyOfflineMode(context: Context, enabled: Boolean) {
     context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         .edit()
         .putBoolean(KEY_PRIVACY_OFFLINE_MODE, enabled)
+        .apply()
+}
+
+fun loadDebugMode(context: Context): Boolean =
+    context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        .getBoolean(KEY_DEBUG_MODE, false)
+
+fun saveDebugMode(context: Context, enabled: Boolean) {
+    context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        .edit()
+        .putBoolean(KEY_DEBUG_MODE, enabled)
         .apply()
 }
 

@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsScreen(
     blockExternalWikiSummaries: Boolean,
-    onBlockExternalWikiSummariesChange: (Boolean) -> Unit
+    onBlockExternalWikiSummariesChange: (Boolean) -> Unit,
+    debugModeEnabled: Boolean,
+    onDebugModeEnabledChange: (Boolean) -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -60,6 +62,33 @@ fun SettingsScreen(
                 Switch(
                     checked = blockExternalWikiSummaries,
                     onCheckedChange = onBlockExternalWikiSummariesChange
+                )
+            }
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                    Text(
+                        "Debug-Menü",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = colors.onSurface
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "Blendet den Logs-Reiter im Menü ein.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = colors.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = debugModeEnabled,
+                    onCheckedChange = onDebugModeEnabledChange
                 )
             }
         }

@@ -2,9 +2,11 @@ package eu.florianbecker.baureihensammler
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.Manifest
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,9 +44,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.FileProvider
+import androidx.core.content.ContextCompat
 import com.canhub.cropper.CropImageView
 import eu.florianbecker.baureihensammler.data.TrainSeriesOrigin
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
+import eu.florianbecker.baureihensammler.util.DebugLogStore
 import java.io.File
 import java.io.FileOutputStream
 
@@ -55,12 +59,17 @@ class CameraCaptureActivity : ComponentActivity() {
 
     private var captureUri: Uri? = null
 
-    private val phase = mutableStateOf(Phase.LaunchingCamera)
+    private val phase = mutableStateOf(Phase.RequestingPermission)
     private val cameraSessionId = mutableIntStateOf(0)
 
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (!success) {
+                DebugLogStore.logError(
+                    context = this,
+                    source = "CameraCaptureActivity.TakePicture",
+                    message = "TakePicture wurde abgebrochen oder lieferte kein Bild."
+                )
                 setResult(RESULT_CANCELED)
                 finish()
             } else {
@@ -68,16 +77,64 @@ class CameraCaptureActivity : ComponentActivity() {
             }
         }
 
+    private val requestCameraPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                phase.value = Phase.LaunchingCamera
+            } else {
+                DebugLogStore.logError(
+                    context = this,
+                    source = "CameraCaptureActivity.RequestPermission",
+                    message = "CAMERA-Berechtigung wurde abgelehnt."
+                )
+                Toast.makeText(
+                    this,
+                    "Kamera-Berechtigung fehlt. Bitte in den App-Einstellungen aktivieren.",
+                    Toast.LENGTH_LONG
+                ).show()
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        baureihe = intent.getStringExtra(EXTRA_BAUREIHE) ?: ""
-        origin = TrainSeriesOrigin.fromName(intent.getStringExtra(EXTRA_ORIGIN))
+        try {
+            baureihe = intent.getStringExtra(EXTRA_BAUREIHE) ?: ""
+            origin = TrainSeriesOrigin.fromName(intent.getStringExtra(EXTRA_ORIGIN))
+        } catch (t: Throwable) {
+            DebugLogStore.logError(
+                context = this,
+                source = "CameraCaptureActivity.onCreate",
+                message = "Intent-Extras konnten nicht gelesen werden.",
+                throwable = t
+            )
+            Toast.makeText(this, "Kamera konnte nicht geöffnet werden", Toast.LENGTH_SHORT).show()
+            setResult(RESULT_CANCELED)
+            finish()
+            return
+        }
 
         setContent {
             BaureihensammlerTheme {
                 val currentPhase by phase
                 val session by cameraSessionId
                 when (currentPhase) {
+                    Phase.RequestingPermission -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize().background(Color.Black),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(color = Color.White)
+                        }
+                        LaunchedEffect(Unit) {
+                            if (hasCameraPermission()) {
+                                phase.value = Phase.LaunchingCamera
+                            } else {
+                                requestCameraPermission.launch(Manifest.permission.CAMERA)
+                            }
+                        }
+                    }
                     Phase.LaunchingCamera -> {
                         Box(
                             modifier = Modifier.fillMaxSize().background(Color.Black),
@@ -86,8 +143,24 @@ class CameraCaptureActivity : ComponentActivity() {
                             CircularProgressIndicator(color = Color.White)
                         }
                         LaunchedEffect(session) {
-                            val uri = prepareCaptureUri()
-                            takePicture.launch(uri)
+                            try {
+                                val uri = prepareCaptureUri()
+                                takePicture.launch(uri)
+                            } catch (t: Throwable) {
+                                DebugLogStore.logError(
+                                    context = this@CameraCaptureActivity,
+                                    source = "CameraCaptureActivity.launchCamera",
+                                    message = "Kamera-Start fehlgeschlagen (URI/FileProvider).",
+                                    throwable = t
+                                )
+                                Toast.makeText(
+                                    this@CameraCaptureActivity,
+                                    "Kamera konnte nicht gestartet werden",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                setResult(RESULT_CANCELED)
+                                finish()
+                            }
                         }
                     }
                     Phase.Cropping -> {
@@ -126,6 +199,10 @@ class CameraCaptureActivity : ComponentActivity() {
         return uri
     }
 
+    private fun hasCameraPermission(): Boolean =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+            PackageManager.PERMISSION_GRANTED
+
     private fun saveCroppedAndFinish(bitmap: Bitmap) {
         val snapshotsDir = File(filesDir, "snapshots").apply { mkdirs() }
         val outFile = File(snapshotsDir, "${baureihe}_${System.currentTimeMillis()}.jpg")
@@ -133,7 +210,13 @@ class CameraCaptureActivity : ComponentActivity() {
             FileOutputStream(outFile).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 92, out)
             }
-        } catch (_: Exception) {
+        } catch (t: Exception) {
+            DebugLogStore.logError(
+                context = this,
+                source = "CameraCaptureActivity.saveCroppedAndFinish",
+                message = "Speichern des zugeschnittenen Bildes fehlgeschlagen.",
+                throwable = t
+            )
             Toast.makeText(this, "Speichern fehlgeschlagen", Toast.LENGTH_SHORT).show()
             setResult(RESULT_CANCELED)
             finish()
@@ -171,6 +254,7 @@ class CameraCaptureActivity : ComponentActivity() {
 }
 
 private enum class Phase {
+    RequestingPermission,
     LaunchingCamera,
     Cropping,
 }
@@ -198,6 +282,14 @@ private fun CropReviewScreen(
                         setFixedAspectRatio(true)
                         setOnSetImageUriCompleteListener { _, _, error ->
                             imageReady.value = error == null
+                            if (error != null) {
+                                DebugLogStore.logError(
+                                    context = ctx,
+                                    source = "CropReviewScreen.setImageUriAsync",
+                                    message = "Bild konnte nicht in CropImageView geladen werden.",
+                                    throwable = error
+                                )
+                            }
                         }
                         setImageUriAsync(imageUri)
                         cropViewHolder.value = this
@@ -254,11 +346,21 @@ private fun CropReviewScreen(
                     }
                     busy = true
                     val bmp =
-                        view.getCroppedImage(
-                            4096,
-                            2304,
-                            CropImageView.RequestSizeOptions.RESIZE_INSIDE
-                        )
+                        try {
+                            view.getCroppedImage(
+                                4096,
+                                2304,
+                                CropImageView.RequestSizeOptions.RESIZE_INSIDE
+                            )
+                        } catch (t: Throwable) {
+                            DebugLogStore.logError(
+                                context = context,
+                                source = "CropReviewScreen.getCroppedImage",
+                                message = "Cropping ist mit Ausnahme fehlgeschlagen.",
+                                throwable = t
+                            )
+                            null
+                        }
                     busy = false
                     if (bmp != null) {
                         onCroppedBitmap(bmp)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsRailway
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.HorizontalDivider
@@ -17,7 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AppDrawerNavigation(currentView: String, onNavigate: (String) -> Unit) {
+fun AppDrawerNavigation(
+    currentView: String,
+    debugModeEnabled: Boolean,
+    onNavigate: (String) -> Unit
+) {
     val colors = MaterialTheme.colorScheme
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -48,5 +53,14 @@ fun AppDrawerNavigation(currentView: String, onNavigate: (String) -> Unit) {
             onClick = { onNavigate("settings") },
             modifier = Modifier.padding(horizontal = 12.dp)
         )
+        if (debugModeEnabled) {
+            NavigationDrawerItem(
+                label = { Text("Logs") },
+                selected = currentView == "logs",
+                icon = { Icon(Icons.Outlined.List, contentDescription = null) },
+                onClick = { onNavigate("logs") },
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+        }
     }
 }

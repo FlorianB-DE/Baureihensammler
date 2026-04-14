@@ -24,7 +24,8 @@ fun TopHeader(
     onCollectionClick: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    val showSearchIcon = currentView == "collection" || currentView == "settings"
+    val showSearchIcon =
+        currentView == "collection" || currentView == "settings" || currentView == "logs"
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
