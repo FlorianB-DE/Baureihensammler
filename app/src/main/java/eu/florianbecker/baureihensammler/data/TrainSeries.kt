@@ -73,6 +73,7 @@ private fun encodeForWiki(value: String): String {
 
 object AlphaTrainSeriesRepository {
     val items: List<TrainSeries> = listOf(
+        // Dampf
         TrainSeries("003 204", "ex DR 03", "Dampflokomotive", 130, 1, "DR-Baureihe_03"),
         TrainSeries("041 231", "ex DR 41", "Dampflokomotive", 90, 1, "DR-Baureihe_41"),
         TrainSeries("044", "ex DR 44", "Dampflokomotive", 80, 2, "DR-Baureihe_44"),
@@ -88,6 +89,8 @@ object AlphaTrainSeriesRepository {
         TrainSeries("099 780", "ex KJI 20/21", "Dampflokomotive", 45, 2, "Baureihe_099"),
         TrainSeries("099 901", "ex DR 99.32", "Dampflokomotive", 50, 3, "DR-Baureihe_99.32"),
         TrainSeries("099 904", "LKM 225 PS Schmalspur", "Dampflokomotive", 35, 2, "DR-Baureihe_99.33"),
+
+        // Elektrisch
         TrainSeries("101", "InterCity Ellok", "Lokomotive", 220, 145, "DB-Baureihe_101"),
         TrainSeries("102", "Skoda 109E", "Elektrolokomotive", 200, 20, "DB-Baureihe_102"),
         TrainSeries("105", "Talgo Travca", "Elektrolokomotive", 230, 23, "DB-Baureihe_105"),
@@ -114,6 +117,11 @@ object AlphaTrainSeriesRepository {
         TrainSeries("185", "TRAXX F140 AC", "Lokomotive", 140, 370, "DB-Baureihe_185"),
         TrainSeries("187", "TRAXX F140 AC3", "Lokomotive", 140, 200, "DB-Baureihe_187"),
         TrainSeries("193", "Vectron", "Lokomotive", 160, 160, "DB-Baureihe_193"),
+
+        // Diesel / Hybrid / Zweikraft / Kleinlok (nach Baureihe sortiert)
+        TrainSeries("1001", "Hybridlok", "Hybridlokomotive", 60, 10, "Rangierlokomotive"),
+        TrainSeries("1002", "Alstom Prima H3", "Hybridlokomotive", 60, 30, "Alstom_Prima_H3"),
+        TrainSeries("1004", "CRRC Rangierlok", "Hybridlokomotive", 100, 20, "DB-Baureihe_1004"),
         TrainSeries("203", "ex DR V100 modernisiert", "Diesellokomotive", 100, 20, "DB-Baureihe_203"),
         TrainSeries("212", "ex DB V 100.20", "Diesellokomotive", 100, 40, "DB-Baureihe_212"),
         TrainSeries("218", "Diesellok", "Lokomotive", 140, 215, "DB-Baureihe_218"),
@@ -133,11 +141,6 @@ object AlphaTrainSeriesRepository {
         TrainSeries("295", "Umbau aus 291", "Diesellokomotive", 80, 80, "DB-Baureihe_295"),
         TrainSeries("296", "Umbau aus 290", "Diesellokomotive", 80, 40, "DB-Baureihe_296"),
         TrainSeries("298", "ex DR V 100", "Diesellokomotive", 80, 50, "DB-Baureihe_298"),
-        TrainSeries("4125", "Vossloh DE 12", "Diesellokomotive", 120, 20, "Vossloh_DE_12"),
-        TrainSeries("4185", "Vossloh DE 18", "Diesellokomotive", 120, 20, "Vossloh_DE_18"),
-        TrainSeries("1001", "Hybridlok", "Hybridlokomotive", 60, 10, "Rangierlokomotive"),
-        TrainSeries("1002", "Alstom Prima H3", "Hybridlokomotive", 60, 30, "Alstom_Prima_H3"),
-        TrainSeries("1004", "CRRC Rangierlok", "Hybridlokomotive", 100, 20, "DB-Baureihe_1004"),
         TrainSeries("2159", "Stadler Eurodual", "Zweikraftlokomotive", 120, 20, "Stadler_Eurodual"),
         TrainSeries("2248", "Vectron Dual Mode", "Zweikraftlokomotive", 160, 40, "Siemens_Vectron_Dual_Mode"),
         TrainSeries("2249", "Vectron Dual Mode light", "Zweikraftlokomotive", 120, 30, "Siemens_Vectron_Dual_Mode"),
@@ -162,7 +165,11 @@ object AlphaTrainSeriesRepository {
         TrainSeries("383", "ex LEW EL 16", "Kleinlok", 6, 20, "LEW_EL_16"),
         TrainSeries("399 105", "Wangerooge L18H", "Kleinlok", 20, 2, "DB-Baureihe_399"),
         TrainSeries("399 107", "Wangerooge Schoma", "Kleinlok", 20, 2, "DB-Baureihe_399"),
+        TrainSeries("4125", "Vossloh DE 12", "Diesellokomotive", 120, 20, "Vossloh_DE_12"),
+        TrainSeries("4185", "Vossloh DE 18", "Diesellokomotive", 120, 20, "Vossloh_DE_18"),
         TrainSeries("650", "Vossloh G6", "Kleinlok", 80, 50, "DB-Baureihe_650"),
+
+        // Triebzüge
         TrainSeries("401", "ICE 1", "Triebzug", 280, 59, "DB-Baureihe_401"),
         TrainSeries("402", "ICE 2", "Triebzug", 280, 44, "DB-Baureihe_402"),
         TrainSeries("403", "ICE 3", "Triebzug", 330, 67, "DB-Baureihe_403_(1997)"),
@@ -201,6 +208,24 @@ object AlphaTrainSeriesRepository {
             wikiArticleTitle = "DB-Baureihe_424",
             aliases = listOf("434", "424.0", "424.5", "434.0", "434.5"),
         ),
+        TrainSeries(
+            baureihe = "483",
+            name = "S-Bahn Berlin 483/484",
+            category = "Triebzug",
+            vmaxKmh = 100,
+            fleetEstimate = 106,
+            wikiArticleTitle = "DB-Baureihe_483/484",
+            aliases = listOf("0483", "484", "0484"),
+        ),
+        TrainSeries(
+            baureihe = "1462",
+            name = "Siemens Desiro HC",
+            category = "Triebzug",
+            vmaxKmh = 190,
+            fleetEstimate = 20,
+            wikiArticleTitle = "Siemens_Desiro_HC",
+            aliases = listOf("01462", "4462", "04462"),
+        ),
         // TODO: Find Fix for DR ET 25 (DB BR 425)
         // TrainSeries(
         //     baureihe = "425 (historisch, ex ET 25)",
@@ -213,28 +238,25 @@ object AlphaTrainSeriesRepository {
         // ),
         TrainSeries(
             baureihe = "425 (1999)",
-            name = "DB-Baureihe 425 (1999)",
+            name = "DB-Baureihe 425",
             category = "Triebzug",
             vmaxKmh = 140,
             fleetEstimate = 250,
             wikiArticleTitle = "DB-Baureihe_425_(1999)",
             overlapGroupKey = "425",
             overlapVehicleRanges = listOf(100..399, 500..999),
+            aliases = listOf("435", "426", "436"),
         ),
-        TrainSeries("435", "S-Bahn ET 435", "Triebzug", 160, 120, "DB-Baureihe_425"),
-        TrainSeries("426", "Regional ET 426", "Triebzug", 160, 60, "DB-Baureihe_426"),
         TrainSeries(
-            baureihe = "3427",
-            name = "FLIRT 3XL",
+            baureihe = "429",
+            name = "Stadler FLIRT",
             category = "Triebzug",
             vmaxKmh = 160,
-            fleetEstimate = 90,
-            wikiArticleTitle = "Stadler_Flirt_3",
-            aliases = listOf("03427", "3428", "03428", "3429", "03429"),
+            fleetEstimate = 150,
+            wikiArticleTitle = "Stadler_Flirt",
+            aliases = listOf("0429", "1428", "526", "0526"),
         ),
-        TrainSeries("1428", "FLIRT 3", "Triebzug", 160, 40, "Stadler_Flirt_3"),
-        TrainSeries("429", "FLIRT", "Triebzug", 160, 40, "DB-Baureihe_429"),
-        TrainSeries("429.1", "FLIRT 3", "Triebzug", 160, 25, "Stadler_Flirt_3"),
+
         TrainSeries("430", "S-Bahn Rhein-Main", "Triebzug", 140, 190, "DB-Baureihe_430"),
         TrainSeries(
             baureihe = "440",
@@ -286,15 +308,6 @@ object AlphaTrainSeriesRepository {
             aliases = listOf("0445"),
         ),
         TrainSeries("447", "Alstom Coradia Max", "Triebzug", 160, 20, "Alstom_Coradia_Max"),
-        TrainSeries(
-            baureihe = "1462",
-            name = "Siemens Desiro HC",
-            category = "Triebzug",
-            vmaxKmh = 190,
-            fleetEstimate = 20,
-            wikiArticleTitle = "Siemens_Desiro_HC",
-            aliases = listOf("01462", "4462", "04462"),
-        ),
         TrainSeries("463", "Mireo", "Triebzug", 160, 90, "Siemens_Mireo")
     )
 }
