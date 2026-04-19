@@ -25,7 +25,10 @@ fun TopHeader(
 ) {
     val colors = MaterialTheme.colorScheme
     val showSearchIcon =
-        currentView == "collection" || currentView == "settings" || currentView == "logs"
+        currentView == "collection" ||
+            currentView == "directory" ||
+            currentView == "settings" ||
+            currentView == "logs"
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

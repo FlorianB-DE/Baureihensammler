@@ -152,12 +152,14 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
         enabled =
             drawerState.currentValue == DrawerValue.Open ||
                 currentView == "collection" ||
+                currentView == "directory" ||
                 currentView == "settings" ||
                 currentView == "logs"
     ) {
         when {
             drawerState.currentValue == DrawerValue.Open -> scope.launch { drawerState.close() }
             currentView == "collection" -> currentView = "search"
+            currentView == "directory" -> currentView = "search"
             currentView == "settings" -> currentView = "search"
             currentView == "logs" -> currentView = "search"
         }
@@ -316,6 +318,11 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                 }
                             }
                         )
+                    } else if (currentView == "directory") {
+                        DirectoryScreen(
+                            catalog = catalogForOrigin(selectedOrigin),
+                            selectedOrigin = selectedOrigin
+                        )
                     } else if (currentView == "settings") {
                         SettingsScreen(
                             blockExternalWikiSummaries = blockExternalWikiSummaries,
@@ -334,7 +341,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         LogsScreen(logs = DebugLogStore.listLogs(context))
                     }
                 }
-                if (showStatsRow && currentView != "settings" && currentView != "logs") {
+                if (showStatsRow && currentView != "settings" && currentView != "logs" && currentView != "directory") {
                     StatsRow(
                         points = totalPoints,
                         discovered = discoveredForOrigin,
