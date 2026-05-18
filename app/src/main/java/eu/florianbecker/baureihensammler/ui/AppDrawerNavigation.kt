@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsRailway
 import androidx.compose.material.icons.outlined.Feedback
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Search
@@ -53,6 +54,13 @@ fun AppDrawerNavigation(
             selected = currentView == "directory",
             icon = { Icon(Icons.Outlined.MenuBook, contentDescription = null) },
             onClick = { onNavigate("directory") },
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+        NavigationDrawerItem(
+            label = { Text("Infos") },
+            selected = currentView == "info",
+            icon = { Icon(Icons.Outlined.HelpOutline, contentDescription = null) },
+            onClick = { onNavigate("info") },
             modifier = Modifier.padding(horizontal = 12.dp)
         )
         NavigationDrawerItem(

@@ -12,6 +12,7 @@ const val KEY_COLLECTION = "collection_entries"
 const val KEY_PRIVACY_OFFLINE_MODE = "privacy_offline_mode"
 const val KEY_DEBUG_MODE = "debug_mode"
 const val KEY_PRIVACY_TOOLTIP_SHOWN = "privacy_tooltip_shown"
+const val KEY_ONBOARDING_SHOWN = "onboarding_shown"
 
 val collectionDateFormatter: DateTimeFormatter =
     DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
@@ -50,6 +51,21 @@ fun savePrivacyTooltipShown(context: Context, shown: Boolean) {
     context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         .edit()
         .putBoolean(KEY_PRIVACY_TOOLTIP_SHOWN, shown)
+        .apply()
+}
+
+fun loadOnboardingShown(context: Context): Boolean =
+    if (BuildConfig.DEBUG) {
+        false
+    } else {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_ONBOARDING_SHOWN, false)
+    }
+
+fun saveOnboardingShown(context: Context, shown: Boolean) {
+    context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        .edit()
+        .putBoolean(KEY_ONBOARDING_SHOWN, shown)
         .apply()
 }
 

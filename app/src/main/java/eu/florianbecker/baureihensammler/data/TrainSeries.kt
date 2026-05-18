@@ -88,7 +88,7 @@ class IntRangeDeserializer : JsonDeserializer<IntRange> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): IntRange {
         val array = json.asJsonArray
         val start = array[0].asInt
@@ -116,9 +116,10 @@ object AlphaTrainSeriesRepository {
         )
     
     private fun loadTrainSeriesFromJson(context: Context): List<TrainSeries> {
-        val gson = GsonBuilder()
-            .registerTypeAdapter(IntRange::class.java, IntRangeDeserializer())
-            .create()
+        val gson =
+            GsonBuilder()
+                .registerTypeAdapter(IntRange::class.java, IntRangeDeserializer())
+                .create()
 
         val hjsonString = context.assets.open("train_series.hjson").bufferedReader().use {
             it.readText()

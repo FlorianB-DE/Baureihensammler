@@ -64,7 +64,6 @@ import androidx.core.view.WindowInsetsCompat
 import eu.florianbecker.baureihensammler.data.AlphaTrainSeriesRepository
 import eu.florianbecker.baureihensammler.data.TrainSeries
 import eu.florianbecker.baureihensammler.data.fetchWikipediaSummary
-import eu.florianbecker.baureihensammler.ui.TrainSeriesScreen
 import eu.florianbecker.baureihensammler.ui.theme.BaureihensammlerTheme
 import eu.florianbecker.baureihensammler.util.DebugLogStore
 import org.json.JSONArray
@@ -83,7 +82,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             BaureihensammlerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TrainSeriesScreen(modifier = Modifier.padding(innerPadding))
+                    eu.florianbecker.baureihensammler.ui.TrainSeriesScreen(
+                        modifier = Modifier.padding(innerPadding),
+                    )
                 }
             }
         }

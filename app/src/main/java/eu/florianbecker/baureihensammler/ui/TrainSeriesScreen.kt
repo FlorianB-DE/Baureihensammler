@@ -41,7 +41,9 @@ import eu.florianbecker.baureihensammler.collection.collectionDateFormatter
 import eu.florianbecker.baureihensammler.collection.loadCollection
 import eu.florianbecker.baureihensammler.collection.loadDebugMode
 import eu.florianbecker.baureihensammler.collection.loadPrivacyOfflineMode
+import eu.florianbecker.baureihensammler.collection.loadOnboardingShown
 import eu.florianbecker.baureihensammler.collection.loadPrivacyTooltipShown
+import eu.florianbecker.baureihensammler.collection.saveOnboardingShown
 import eu.florianbecker.baureihensammler.collection.saveCollection
 import eu.florianbecker.baureihensammler.collection.saveDebugMode
 import eu.florianbecker.baureihensammler.collection.savePrivacyOfflineMode
@@ -150,8 +152,23 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     var blockExternalWikiSummaries by remember { mutableStateOf(loadPrivacyOfflineMode(context)) }
     var debugModeEnabled by remember { mutableStateOf(loadDebugMode(context)) }
-    var showPrivacyTooltip by remember { mutableStateOf(!loadPrivacyTooltipShown(context)) }
+    var showOnboarding by remember { mutableStateOf(!loadOnboardingShown(context)) }
+    var showPrivacyTooltip by remember { mutableStateOf(false) }
     var highlightPrivacySetting by remember { mutableStateOf(false) }
+
+    fun dismissOnboarding() {
+        showOnboarding = false
+        saveOnboardingShown(context, true)
+        if (!loadPrivacyTooltipShown(context)) {
+            showPrivacyTooltip = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (loadOnboardingShown(context) && !loadPrivacyTooltipShown(context)) {
+            showPrivacyTooltip = true
+        }
+    }
 
     BackHandler(
         enabled =
@@ -160,12 +177,14 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                 currentView == "directory" ||
                 currentView == "feedback" ||
                 currentView == "settings" ||
-                currentView == "logs"
+                currentView == "logs" ||
+                currentView == "info"
     ) {
         when {
             drawerState.currentValue == DrawerValue.Open -> scope.launch { drawerState.close() }
             currentView == "collection" -> currentView = "search"
             currentView == "directory" -> currentView = "search"
+            currentView == "info" -> currentView = "search"
             currentView == "feedback" -> currentView = "search"
             currentView == "settings" -> currentView = "search"
             currentView == "logs" -> currentView = "search"
@@ -204,6 +223,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                 val searchScroll = rememberScrollState()
                 val settingsScroll = rememberScrollState()
                 val feedbackScroll = rememberScrollState()
+                val infoScroll = rememberScrollState()
                 Column(
                     modifier =
                         Modifier.weight(1f)
@@ -213,6 +233,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                                     "search" -> Modifier.verticalScroll(searchScroll)
                                     "settings" -> Modifier.verticalScroll(settingsScroll)
                                     "feedback" -> Modifier.verticalScroll(feedbackScroll)
+                                    "info" -> Modifier.verticalScroll(infoScroll)
                                     else -> Modifier
                                 }
                             ),
@@ -222,7 +243,8 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         currentView = currentView,
                         onMenuClick = { scope.launch { drawerState.open() } },
                         onSearchClick = { currentView = "search" },
-                        onCollectionClick = { currentView = "collection" }
+                        onCollectionClick = { currentView = "collection" },
+                        onInfoClick = { currentView = "info" },
                     )
 
                     if (currentView == "search") {
@@ -358,6 +380,8 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                             catalog = catalogForOrigin(selectedOrigin),
                             selectedOrigin = selectedOrigin
                         )
+                    } else if (currentView == "info") {
+                        FahrzeugnummerInfoScreen(onOpenUrl = { url -> openUrl(context, url) })
                     } else if (currentView == "feedback") {
                         FeedbackScreen(
                             privacyModeEnabled = blockExternalWikiSummaries,
@@ -390,6 +414,7 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                         currentView != "settings" &&
                         currentView != "logs" &&
                         currentView != "directory" &&
+                        currentView != "info" &&
                         currentView != "feedback"
                 ) {
                     StatsRow(
@@ -401,6 +426,10 @@ fun TrainSeriesScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
+    }
+
+    if (showOnboarding) {
+        OnboardingTutorialDialog(onDismiss = { dismissOnboarding() })
     }
 
     if (showPrivacyTooltip) {

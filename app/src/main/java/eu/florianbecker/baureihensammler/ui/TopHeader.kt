@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsRailway
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -21,7 +22,8 @@ fun TopHeader(
     currentView: String,
     onMenuClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onCollectionClick: () -> Unit
+    onCollectionClick: () -> Unit,
+    onInfoClick: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
     val showSearchIcon =
@@ -29,7 +31,9 @@ fun TopHeader(
             currentView == "directory" ||
             currentView == "feedback" ||
             currentView == "settings" ||
-            currentView == "logs"
+            currentView == "logs" ||
+            currentView == "info"
+    val showInfoButton = currentView == "search"
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -41,12 +45,23 @@ fun TopHeader(
             }
             Text("Baureihensammler", color = colors.onBackground, fontWeight = FontWeight.Bold)
         }
-        IconButton(onClick = if (showSearchIcon) onSearchClick else onCollectionClick) {
-            Icon(
-                if (showSearchIcon) Icons.Outlined.Search else Icons.Outlined.DirectionsRailway,
-                contentDescription = if (showSearchIcon) "Zur Suche" else "Zur Sammlung",
-                tint = colors.onBackground
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (showInfoButton) {
+                IconButton(onClick = onInfoClick) {
+                    Icon(
+                        Icons.Outlined.HelpOutline,
+                        contentDescription = "Infos zur Fahrzeugnummer",
+                        tint = colors.onBackground,
+                    )
+                }
+            }
+            IconButton(onClick = if (showSearchIcon) onSearchClick else onCollectionClick) {
+                Icon(
+                    if (showSearchIcon) Icons.Outlined.Search else Icons.Outlined.DirectionsRailway,
+                    contentDescription = if (showSearchIcon) "Zur Suche" else "Zur Sammlung",
+                    tint = colors.onBackground
+                )
+            }
         }
     }
 }

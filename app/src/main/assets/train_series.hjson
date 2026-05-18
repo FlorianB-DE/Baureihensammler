@@ -99,7 +99,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [701, 713],
+    "overlapVehicleRanges": [[701, 713]],
     "overlapVehicleDigits": null
   },
   {
@@ -112,7 +112,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [720, 720],
+    "overlapVehicleRanges": [[720, 720]],
     "overlapVehicleDigits": null
   },
   {
@@ -125,7 +125,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [722, 735],
+    "overlapVehicleRanges": [[722, 735]],
     "overlapVehicleDigits": null
   },
   {
@@ -138,7 +138,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [736, 757],
+    "overlapVehicleRanges": [[736, 757]],
     "overlapVehicleDigits": null
   },
   {
@@ -151,7 +151,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [760, 760],
+    "overlapVehicleRanges": [[760, 760]],
     "overlapVehicleDigits": null
   },
   {
@@ -164,7 +164,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [770, 771],
+    "overlapVehicleRanges": [[770, 771]],
     "overlapVehicleDigits": null
   },
   {
@@ -177,7 +177,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [780, 781],
+    "overlapVehicleRanges": [[780, 781]],
     "overlapVehicleDigits": null
   },
   {
@@ -190,7 +190,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [901, 903],
+    "overlapVehicleRanges": [[901, 903]],
     "overlapVehicleDigits": null
   },
   {
@@ -203,7 +203,7 @@
     "origin": "DB",
     "aliases": ["99"],
     "overlapGroupKey": null,
-    "overlapVehicleRanges": [904, 905],
+    "overlapVehicleRanges": [[904, 905]],
     "overlapVehicleDigits": null
   },
   {
