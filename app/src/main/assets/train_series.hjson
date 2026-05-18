@@ -233,6 +233,32 @@
     "overlapVehicleDigits": null
   },
   {
+    "baureihe": "103",
+    "name": "Schnellzug-Ellok",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 200,
+    "fleetEstimate": 5,
+    "wikiArticleTitle": "DB-Baureihe_103",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "104",
+    "name": "ex DR E 04",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 130,
+    "fleetEstimate": 1,
+    "wikiArticleTitle": "DR-Baureihe_E_04",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
     "baureihe": "105",
     "name": "Talgo Travca",
     "category": "Elektrolokomotive",
@@ -246,12 +272,199 @@
     "overlapVehicleDigits": null
   },
   {
+    "baureihe": "109",
+    "name": "ex DR E 11",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 7,
+    "wikiArticleTitle": "DB-Baureihe_109",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "110",
+    "name": "ex DB E 10",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 140,
+    "fleetEstimate": 20,
+    "wikiArticleTitle": "DB-Baureihe_E_10",
+    "origin": "DB",
+    "aliases": [
+      "115"
+    ],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
     "baureihe": "111",
     "name": "ex DB E 41",
     "category": "Elektrolokomotive",
     "vmaxKmh": 160,
     "fleetEstimate": 61,
     "wikiArticleTitle": "DB-Baureihe_111",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "112",
+    "name": "ex DR/DB 112.1",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 90,
+    "wikiArticleTitle": "DB-Baureihe_112",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [
+      [
+        1,
+        199
+      ]
+    ],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "112",
+    "name": "ex Baureihe E 10 ",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 26,
+    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_E_10.12/Baureihe_112",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [
+      [
+        200,
+        299
+      ]
+    ],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "113",
+    "name": "ex Baureihe E 10",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 3,
+    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_113",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "114",
+    "name": "DB BR 114.0 (ex Baureihe 112.0)",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 500,
+    "wikiArticleTitle": "DR-Baureihe_243#DB-Baureihe_114.0",
+    "origin": "DB",
+    "aliases": [
+      "114.0",
+      "114.1",
+      "114.3",
+      "143"
+    ],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [
+      [
+        1,
+        484
+      ],
+      [
+        505,
+        999
+      ]
+    ],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "114",
+    "name": "ex Baureihe E 10 ",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 20,
+    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_E_10.12/Baureihe_114",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [
+      [
+        485,
+        504
+      ]
+    ],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "115",
+    "name": "ex Baureihe E 10",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 160,
+    "fleetEstimate": 1,
+    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_115",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "139",
+    "name": "ex DB E 40.11",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 47,
+    "wikiArticleTitle": "DB-Baureihe_E_40#Baureihe_E_40.11_bzw._139",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "140",
+    "name": "ex DB E 40 (Einheitselektrolok)",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 848,
+    "wikiArticleTitle": "DB-Baureihe_E_40",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "141",
+    "name": "ex DB E 41",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 11,
+    "wikiArticleTitle": "DB-Baureihe_E_41",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "142",
+    "name": "ex DR E 42",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 100,
+    "fleetEstimate": 4,
+    "wikiArticleTitle": "DR-Baureihe_E_42",
     "origin": "DB",
     "aliases": [],
     "overlapGroupKey": null,
@@ -343,6 +556,32 @@
     "overlapVehicleDigits": null
   },
   {
+    "baureihe": "150",
+    "name": "ex DB E 50",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 100,
+    "fleetEstimate": 2,
+    "wikiArticleTitle": "DB-Baureihe_E_50",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "151",
+    "name": "Schwere Güterzug-Ellok",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 150,
+    "wikiArticleTitle": "DB-Baureihe_151",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
     "baureihe": "152",
     "name": "Güterzug-Ellok",
     "category": "Lokomotive",
@@ -362,6 +601,19 @@
     "vmaxKmh": 230,
     "fleetEstimate": 30,
     "wikiArticleTitle": "DB-Baureihe_182",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "185",
+    "name": "TRAXX F140 AC",
+    "category": "Lokomotive",
+    "vmaxKmh": 140,
+    "fleetEstimate": 370,
+    "wikiArticleTitle": "Bombardier_Traxx",
     "origin": "DB",
     "aliases": [],
     "overlapGroupKey": null,
@@ -412,32 +664,6 @@
     "overlapVehicleDigits": null
   },
   {
-    "baureihe": "189",
-    "name": "Siemens ES64F4",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 140,
-    "fleetEstimate": 100,
-    "wikiArticleTitle": "DB-Baureihe_189",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "185",
-    "name": "TRAXX F140 AC",
-    "category": "Lokomotive",
-    "vmaxKmh": 140,
-    "fleetEstimate": 370,
-    "wikiArticleTitle": "Bombardier_Traxx",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
     "baureihe": "187",
     "name": "Traxx F140/F160 AC3",
     "category": "Lokomotive",
@@ -459,6 +685,19 @@
     "vmaxKmh": 160,
     "fleetEstimate": 20,
     "wikiArticleTitle": "Bombardier_Traxx",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "189",
+    "name": "Siemens ES64F4",
+    "category": "Elektrolokomotive",
+    "vmaxKmh": 140,
+    "fleetEstimate": 100,
+    "wikiArticleTitle": "DB-Baureihe_189",
     "origin": "DB",
     "aliases": [],
     "overlapGroupKey": null,
@@ -1835,422 +2074,6 @@
     "vmaxKmh": 160,
     "fleetEstimate": 1,
     "wikiArticleTitle": "DR-Baureihe_VT_18.16",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "065",
-    "name": "ex DR 65.10",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 90,
-    "fleetEstimate": 1,
-    "wikiArticleTitle": "DR-Baureihe_65.10",
-    "origin": "DB",
-    "aliases": [
-      "65"
-    ],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "Sachsische IV K",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 30,
-    "fleetEstimate": 5,
-    "wikiArticleTitle": "DR-Baureihe_99.51-60",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        701,
-        713
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "Sachsische VI K",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 30,
-    "fleetEstimate": 1,
-    "wikiArticleTitle": "DR-Baureihe_99.67-71",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        720,
-        720
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "ex DR 99.73-76",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 30,
-    "fleetEstimate": 14,
-    "wikiArticleTitle": "DR-Baureihe_99.73-76",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        722,
-        735
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "ex DR 99.77-79",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 30,
-    "fleetEstimate": 21,
-    "wikiArticleTitle": "DR-Baureihe_99.77-79",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        736,
-        757
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "Trusetal",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 25,
-    "fleetEstimate": 1,
-    "wikiArticleTitle": "TB_Glückauf_und_Trusetal",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        760,
-        760
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "ex RukB Mh",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 30,
-    "fleetEstimate": 2,
-    "wikiArticleTitle": "Lenz-Typ_M",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        770,
-        771
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "ex KJI 20/21",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 45,
-    "fleetEstimate": 2,
-    "wikiArticleTitle": "KJI_Nr._20_und_21",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        780,
-        781
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "ex DR 99.32",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 50,
-    "fleetEstimate": 3,
-    "wikiArticleTitle": "DR-Baureihe_99.32",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        901,
-        903
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "099",
-    "name": "LKM 225 PS Schmalspur",
-    "category": "Dampflokomotive",
-    "vmaxKmh": 35,
-    "fleetEstimate": 2,
-    "wikiArticleTitle": "DR-Baureihe_99.33",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        904,
-        905
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "103",
-    "name": "Schnellzug-Ellok",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 200,
-    "fleetEstimate": 5,
-    "wikiArticleTitle": "DB-Baureihe_103",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "104",
-    "name": "ex DR E 04",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 130,
-    "fleetEstimate": 1,
-    "wikiArticleTitle": "DR-Baureihe_E_04",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "109",
-    "name": "ex DR E 11",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 120,
-    "fleetEstimate": 7,
-    "wikiArticleTitle": "DB-Baureihe_109",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "110",
-    "name": "ex DB E 10",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 140,
-    "fleetEstimate": 20,
-    "wikiArticleTitle": "DB-Baureihe_E_10",
-    "origin": "DB",
-    "aliases": [
-      "115"
-    ],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "112",
-    "name": "ex DR/DB 112.1",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 90,
-    "wikiArticleTitle": "DB-Baureihe_112",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        1,
-        199
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "112",
-    "name": "ex Baureihe E 10 ",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 26,
-    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_E_10.12/Baureihe_112",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        200,
-        299
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "113",
-    "name": "ex Baureihe E 10",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 3,
-    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_113",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "114",
-    "name": "DB BR 114.0 (ex Baureihe 112.0)",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 500,
-    "wikiArticleTitle": "DR-Baureihe_243#DB-Baureihe_114.0",
-    "origin": "DB",
-    "aliases": [
-      "114.0",
-      "114.1",
-      "114.3",
-      "143"
-    ],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        1,
-        484
-      ],
-      [
-        505,
-        999
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "114",
-    "name": "ex Baureihe E 10 ",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 20,
-    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_E_10.12/Baureihe_114",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [
-      [
-        485,
-        504
-      ]
-    ],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "115",
-    "name": "ex Baureihe E 10",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 1,
-    "wikiArticleTitle": "DB-Baureihe_E_10#Baureihe_115",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "139",
-    "name": "ex DB E 40.11",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 120,
-    "fleetEstimate": 47,
-    "wikiArticleTitle": "DB-Baureihe_E_40#Baureihe_E_40.11_bzw._139",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "140",
-    "name": "ex DB E 40 (Einheitselektrolok)",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 120,
-    "fleetEstimate": 848,
-    "wikiArticleTitle": "DB-Baureihe_E_40",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "141",
-    "name": "ex DB E 41",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 120,
-    "fleetEstimate": 11,
-    "wikiArticleTitle": "DB-Baureihe_E_41",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "142",
-    "name": "ex DR E 42",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 100,
-    "fleetEstimate": 4,
-    "wikiArticleTitle": "DR-Baureihe_E_42",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "150",
-    "name": "ex DB E 50",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 100,
-    "fleetEstimate": 2,
-    "wikiArticleTitle": "DB-Baureihe_E_50",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "151",
-    "name": "Schwere Güterzug-Ellok",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 120,
-    "fleetEstimate": 150,
-    "wikiArticleTitle": "DB-Baureihe_151",
     "origin": "DB",
     "aliases": [],
     "overlapGroupKey": null,
