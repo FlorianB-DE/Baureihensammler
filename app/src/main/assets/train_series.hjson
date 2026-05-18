@@ -1195,6 +1195,19 @@
     "overlapVehicleDigits": null
   },
   {
+    "baureihe": "409",
+    "name": "Thalys PBKA",
+    "category": "Triebzug",
+    "vmaxKmh": 300,
+    "fleetEstimate": 2,
+    "wikiArticleTitle": "Thalys",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
     "baureihe": "411",
     "name": "ICE T (7-teilig)",
     "category": "Triebzug",
@@ -1393,11 +1406,49 @@
     "wikiArticleTitle": "Stadler_Flirt",
     "origin": "DB",
     "aliases": [
-      "0429",
-      "1428",
-      "526",
-      "0526"
+      "427",
+      "428"
     ],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "429.1",
+    "name": "Stadler Flirt 3",
+    "category": "Triebzug",
+    "vmaxKmh": 160,
+    "fleetEstimate": 65,
+    "wikiArticleTitle": "Stadler_Flirt",
+    "origin": "DB",
+    "aliases": ["1427", "1428", "1429"],
+    "overlapGroupKey": null
+  },
+  {
+    "baureihe": "3428",
+    "name": "Flirt 3 XL",
+    "category": "Triebzug",
+    "vmaxKmh": 160,
+    "fleetEstimate": 65,
+    "wikiArticleTitle": "Stadler_Flirt",
+    "origin": "DB",
+    "aliases": [
+      "3427",
+      "3429"
+    ],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "526",
+    "name": "Stadler FLIRT Akku",
+    "category": "Triebzug",
+    "vmaxKmh": 140,
+    "fleetEstimate": 55,
+    "wikiArticleTitle": "Stadler_Flirt",
+    "origin": "DB",
+    "aliases": [],
     "overlapGroupKey": null,
     "overlapVehicleRanges": [],
     "overlapVehicleDigits": null
@@ -1510,6 +1561,19 @@
         133
       ]
     ],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "4110",
+    "name": "Stadler KISS (Intercity)",
+    "category": "Triebzug",
+    "vmaxKmh": 200,
+    "fleetEstimate": 130,
+    "wikiArticleTitle": "Stadler_KISS",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
     "overlapVehicleDigits": null
   },
   {
