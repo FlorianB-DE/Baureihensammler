@@ -258,32 +258,6 @@
     "overlapVehicleDigits": null
   },
   {
-    "baureihe": "112",
-    "name": "ex DR/DB 112.1",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 90,
-    "wikiArticleTitle": "DB-Baureihe_112",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
-    "baureihe": "114",
-    "name": "ex DR 212.0",
-    "category": "Elektrolokomotive",
-    "vmaxKmh": 160,
-    "fleetEstimate": 40,
-    "wikiArticleTitle": "DB-Baureihe_114",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
     "baureihe": "143",
     "name": "ex DR 243",
     "category": "Elektrolokomotive",
