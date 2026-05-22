@@ -1661,7 +1661,9 @@
     "wikiArticleTitle": "Stadler_Flirt",
     "origin": "DB",
     "aliases": ["1427", "1428", "1429"],
-    "overlapGroupKey": null
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
   },
   {
     "baureihe": "3428",
