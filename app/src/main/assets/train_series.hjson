@@ -1682,19 +1682,6 @@
     "overlapVehicleDigits": null
   },
   {
-    "baureihe": "526",
-    "name": "Stadler FLIRT Akku",
-    "category": "Triebzug",
-    "vmaxKmh": 140,
-    "fleetEstimate": 55,
-    "wikiArticleTitle": "Stadler_Flirt",
-    "origin": "DB",
-    "aliases": [],
-    "overlapGroupKey": null,
-    "overlapVehicleRanges": [],
-    "overlapVehicleDigits": null
-  },
-  {
     "baureihe": "430",
     "name": "S-Bahn Rhein-Main",
     "category": "Triebzug",
@@ -1835,7 +1822,20 @@
     "name": "Mireo",
     "category": "Triebzug",
     "vmaxKmh": 160,
-    "fleetEstimate": 90,
+    "fleetEstimate": 400,
+    "wikiArticleTitle": "Siemens_Mireo",
+    "origin": "DB",
+    "aliases": ["0463", "1463", "2463", "2564" ],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "1420",
+    "name": "Mireo City",
+    "category": "Triebzug",
+    "vmaxKmh": 160,
+    "fleetEstimate": 1,
     "wikiArticleTitle": "Siemens_Mireo",
     "origin": "DB",
     "aliases": [],
@@ -1843,6 +1843,48 @@
     "overlapVehicleRanges": [],
     "overlapVehicleDigits": null
   },
+  {
+    "baureihe": "3464",
+    "name": "Mireo Smart",
+    "category": "Triebzug",
+    "vmaxKmh": 160,
+    "fleetEstimate": 20,
+    "wikiArticleTitle": "Siemens_Mireo",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+
+  // Batterie-Triebzüge / Brennstoffzellentriebzüge
+  {
+    "baureihe": "526",
+    "name": "Stadler FLIRT Akku",
+    "category": "Triebzug",
+    "vmaxKmh": 140,
+    "fleetEstimate": 55,
+    "wikiArticleTitle": "Stadler_Flirt",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
+    "baureihe": "563",
+    "name": "Mireo Plus B/H (Batterie/Wasserstoff)",
+    "category": "Triebzug",
+    "vmaxKmh": 160,
+    "fleetEstimate": 170,
+    "wikiArticleTitle": "Siemens_Mireo",
+    "origin": "DB",
+    "aliases": ["0563"],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+
   // Dieseltriebwagen
   {
     "baureihe": "605",
