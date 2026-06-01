@@ -1597,13 +1597,13 @@
     "name": "Siemens Desiro HC",
     "category": "Triebzug",
     "vmaxKmh": 190,
-    "fleetEstimate": 20,
+    "fleetEstimate": 440,
     "wikiArticleTitle": "Siemens_Desiro_HC",
     "origin": "DB",
     "aliases": [
-      "01462",
-      "4462",
-      "04462"
+      "2462",
+      "0462",
+      "4462"
     ],
     "overlapGroupKey": null,
     "overlapVehicleRanges": [],
