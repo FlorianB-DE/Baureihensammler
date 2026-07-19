@@ -1017,6 +1017,19 @@
     "overlapVehicleDigits": null
   },
   {
+    "baureihe": "2019",
+    "name": "Stadler Euro9000",
+    "category": "Zweikraftlokomotive",
+    "vmaxKmh": 120,
+    "fleetEstimate": 40,
+    "wikiArticleTitle": "Stadler_Euro_9000",
+    "origin": "DB",
+    "aliases": [],
+    "overlapGroupKey": null,
+    "overlapVehicleRanges": [],
+    "overlapVehicleDigits": null
+  },
+  {
     "baureihe": "2159",
     "name": "Stadler Eurodual",
     "category": "Zweikraftlokomotive",
